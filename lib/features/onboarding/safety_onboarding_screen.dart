@@ -43,20 +43,21 @@ class _SafetyOnboardingScreenState extends State<SafetyOnboardingScreen> {
         child: LayoutBuilder(
           builder: (context, constraints) {
             return SingleChildScrollView(
-              padding: EdgeInsets.fromLTRB(20, 16, 20, bottomInset + 20),
+              padding: EdgeInsets.fromLTRB(20, 24, 20, bottomInset + 20),
               child: ConstrainedBox(
                 constraints: BoxConstraints(minHeight: constraints.maxHeight),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    const Center(child: AppLogo(size: 88)),
+                    const Center(child: AppLogo(size: 84, showGlow: true)),
                     const SizedBox(height: 20),
                     Text(
                       l10n.appName,
                       textAlign: TextAlign.center,
                       style: const TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
+                        fontSize: 28,
+                        fontWeight: FontWeight.w700,
+                        letterSpacing: -0.6,
                         color: AppColors.textPrimary,
                       ),
                     ),
@@ -70,24 +71,27 @@ class _SafetyOnboardingScreenState extends State<SafetyOnboardingScreen> {
                         color: AppColors.textSecondary,
                       ),
                     ),
-                    const SizedBox(height: 24),
+                    const SizedBox(height: 28),
                     _InfoCard(
-                      icon: Icons.fiber_manual_record,
-                      iconColor: AppColors.brandMaroonLight,
+                      step: '1',
+                      icon: Icons.touch_app_outlined,
+                      iconColor: AppColors.terracotta,
                       title: l10n.onboardingManualTitle,
                       body: l10n.onboardingManualBody,
                     ),
                     const SizedBox(height: 12),
                     _InfoCard(
-                      icon: Icons.mic,
-                      iconColor: AppColors.brandGreen,
+                      step: '2',
+                      icon: Icons.mic_none_rounded,
+                      iconColor: AppColors.teal,
                       title: l10n.onboardingMicTitle,
                       body: l10n.onboardingMicBody,
                     ),
                     const SizedBox(height: 12),
                     _InfoCard(
-                      icon: Icons.info_outline,
-                      iconColor: AppColors.primary,
+                      step: '3',
+                      icon: Icons.shield_moon_outlined,
+                      iconColor: AppColors.ink,
                       title: l10n.onboardingImportantTitle,
                       body: l10n.onboardingImportantBody,
                       emphasized: true,
@@ -95,23 +99,27 @@ class _SafetyOnboardingScreenState extends State<SafetyOnboardingScreen> {
                     const SizedBox(height: 20),
                     Material(
                       color: AppColors.surface,
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(16),
                       child: InkWell(
                         onTap: () => setState(() => _accepted = !_accepted),
-                        borderRadius: BorderRadius.circular(12),
+                        borderRadius: BorderRadius.circular(16),
                         child: Container(
                           constraints: const BoxConstraints(minHeight: 48),
                           padding: const EdgeInsets.all(12),
                           decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(12),
-                            border: Border.all(color: AppColors.border),
+                            borderRadius: BorderRadius.circular(16),
+                            border: Border.all(
+                              color: _accepted
+                                  ? AppColors.teal
+                                  : AppColors.border,
+                            ),
                           ),
                           child: Row(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Checkbox(
                                 value: _accepted,
-                                activeColor: AppColors.primary,
+                                activeColor: AppColors.teal,
                                 onChanged: (value) {
                                   setState(() => _accepted = value ?? false);
                                 },
@@ -137,13 +145,7 @@ class _SafetyOnboardingScreenState extends State<SafetyOnboardingScreen> {
                     const SizedBox(height: 20),
                     FilledButton(
                       style: FilledButton.styleFrom(
-                        backgroundColor: AppColors.primary,
-                        disabledBackgroundColor:
-                            AppColors.primary.withValues(alpha: 0.35),
-                        minimumSize: const Size(double.infinity, 48),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
+                        minimumSize: const Size(double.infinity, 52),
                       ),
                       onPressed: _accepted ? _continue : null,
                       child: Text(l10n.continueAction),
@@ -161,6 +163,7 @@ class _SafetyOnboardingScreenState extends State<SafetyOnboardingScreen> {
 
 class _InfoCard extends StatelessWidget {
   const _InfoCard({
+    required this.step,
     required this.icon,
     required this.iconColor,
     required this.title,
@@ -168,6 +171,7 @@ class _InfoCard extends StatelessWidget {
     this.emphasized = false,
   });
 
+  final String step;
   final IconData icon;
   final Color iconColor;
   final String title;
@@ -177,12 +181,10 @@ class _InfoCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(14),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: emphasized
-            ? AppColors.infoBannerBackground
-            : AppColors.surface,
-        borderRadius: BorderRadius.circular(12),
+        color: emphasized ? AppColors.infoBannerBackground : AppColors.surface,
+        borderRadius: BorderRadius.circular(18),
         border: Border.all(
           color: emphasized ? AppColors.infoBannerBorder : AppColors.border,
         ),
@@ -190,16 +192,37 @@ class _InfoCard extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
-            width: 40,
-            height: 40,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: iconColor.withValues(alpha: 0.12),
-            ),
-            child: Icon(icon, color: iconColor, size: 22),
+          Stack(
+            clipBehavior: Clip.none,
+            children: [
+              Container(
+                width: 44,
+                height: 44,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(14),
+                  color: iconColor.withValues(alpha: 0.12),
+                ),
+                child: Icon(icon, color: iconColor, size: 22),
+              ),
+              Positioned(
+                top: -6,
+                left: -6,
+                child: CircleAvatar(
+                  radius: 9,
+                  backgroundColor: AppColors.ink,
+                  child: Text(
+                    step,
+                    style: const TextStyle(
+                      color: AppColors.appBarForeground,
+                      fontSize: 10,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
-          const SizedBox(width: 12),
+          const SizedBox(width: 14),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -207,7 +230,7 @@ class _InfoCard extends StatelessWidget {
                 Text(
                   title,
                   style: const TextStyle(
-                    fontWeight: FontWeight.w600,
+                    fontWeight: FontWeight.w700,
                     fontSize: 15,
                     color: AppColors.textPrimary,
                   ),

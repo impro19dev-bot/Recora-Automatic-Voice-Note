@@ -11,7 +11,7 @@ Future<void> showLanguageSelector(BuildContext context) {
   return showModalBottomSheet<void>(
     context: context,
     shape: const RoundedRectangleBorder(
-      borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
     ),
     builder: (sheetContext) {
       return SafeArea(
@@ -21,23 +21,14 @@ Future<void> showLanguageSelector(BuildContext context) {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Center(
-                child: Container(
-                  width: 40,
-                  height: 4,
-                  decoration: BoxDecoration(
-                    color: AppColors.border,
-                    borderRadius: BorderRadius.circular(2),
-                  ),
-                ),
-              ),
+              const Center(child: _SheetHandle()),
               Padding(
                 padding: const EdgeInsets.fromLTRB(12, 16, 12, 8),
                 child: Text(
                   l10n.selectLanguage,
                   style: const TextStyle(
                     fontSize: 18,
-                    fontWeight: FontWeight.w600,
+                    fontWeight: FontWeight.w700,
                     color: AppColors.textPrimary,
                   ),
                 ),
@@ -49,7 +40,7 @@ Future<void> showLanguageSelector(BuildContext context) {
                         ? Icons.check_circle
                         : Icons.circle_outlined,
                     color: locale == localeService.locale
-                        ? AppColors.primary
+                        ? AppColors.teal
                         : AppColors.iconMuted,
                   ),
                   title: Text(locale.displayName),
@@ -65,4 +56,20 @@ Future<void> showLanguageSelector(BuildContext context) {
       );
     },
   );
+}
+
+class _SheetHandle extends StatelessWidget {
+  const _SheetHandle();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 40,
+      height: 4,
+      decoration: BoxDecoration(
+        color: AppColors.border,
+        borderRadius: BorderRadius.circular(2),
+      ),
+    );
+  }
 }

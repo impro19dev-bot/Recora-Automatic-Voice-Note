@@ -1,4 +1,5 @@
 import '../features/recording/recording_type.dart';
+import '../models/recording_sort.dart';
 import '../services/app_preferences_service.dart';
 import 'app_locale.dart';
 
@@ -48,6 +49,8 @@ class AppStrings {
         return recordingTypeOutgoing;
       case RecordingType.voiceNote:
         return recordingTypeVoice;
+      case RecordingType.loggedCall:
+        return recordingTypeLogged;
     }
   }
 
@@ -61,6 +64,8 @@ class AppStrings {
         return badgeOutgoing;
       case RecordingType.voiceNote:
         return badgeVoice;
+      case RecordingType.loggedCall:
+        return badgeLogged;
     }
   }
 
@@ -68,10 +73,12 @@ class AppStrings {
   String get recordingTypeIncoming => _t('recordingTypeIncoming');
   String get recordingTypeOutgoing => _t('recordingTypeOutgoing');
   String get recordingTypeVoice => _t('recordingTypeVoice');
+  String get recordingTypeLogged => _t('recordingTypeLogged');
   String get badgeMeeting => _t('badgeMeeting');
   String get badgeIncoming => _t('badgeIncoming');
   String get badgeOutgoing => _t('badgeOutgoing');
   String get badgeVoice => _t('badgeVoice');
+  String get badgeLogged => _t('badgeLogged');
 
   // --- Call note sheet ---
   String get callNoteSheetTitle => _t('callNoteSheetTitle');
@@ -92,6 +99,35 @@ class AppStrings {
   String get consentBeforeRecord => _t('consentBeforeRecord');
   String get start => _t('start');
   String get stop => _t('stop');
+  String get resume => _t('resume');
+  String get skipBack => _t('skipBack');
+  String get skipForward => _t('skipForward');
+  String get speed => _t('speed');
+  String get searchHint => _t('searchHint');
+  String get sort => _t('sort');
+  String get sortNewest => _t('sortNewest');
+  String get sortOldest => _t('sortOldest');
+  String get sortLongest => _t('sortLongest');
+  String get sortTitle => _t('sortTitle');
+  String get noSearchResults => _t('noSearchResults');
+  String get logCall => _t('logCall');
+  String get logCallSubtitle => _t('logCallSubtitle');
+  String get callLogged => _t('callLogged');
+  String get autoStart => _t('autoStart');
+  String get autoStartBody => _t('autoStartBody');
+  String get audioQuality => _t('audioQuality');
+  String get qualityLow => _t('qualityLow');
+  String get qualityStandard => _t('qualityStandard');
+  String get qualityHigh => _t('qualityHigh');
+  String get featureOrganizeTitle => _t('featureOrganizeTitle');
+  String get featureOrganizeBody => _t('featureOrganizeBody');
+  String get featureIncomingTitle => _t('featureIncomingTitle');
+  String get featureIncomingBody => _t('featureIncomingBody');
+  String get featureSimpleTitle => _t('featureSimpleTitle');
+  String get featureSimpleBody => _t('featureSimpleBody');
+  String get statsRecordings => _t('statsRecordings');
+  String get statsTime => _t('statsTime');
+  String get newRecording => _t('newRecording');
 
   // --- Save / edit sheets ---
   String get save => _t('save');
@@ -147,7 +183,6 @@ class AppStrings {
   String get rateFiveStars => _t('rateFiveStars');
   String get drawerSafetyBanner => _t('drawerSafetyBanner');
   String get shareAppText => _t('shareAppText');
-  String get adPrivacySettings => _t('adPrivacySettings');
 
   // --- Recording mode ---
   String get modeManual => _t('modeManual');
@@ -162,6 +197,30 @@ class AppStrings {
         return modeMeeting;
       case RecordingModePreference.callNote:
         return modeCallNote;
+    }
+  }
+
+  String qualityLabel(AudioQualityPreference quality) {
+    switch (quality) {
+      case AudioQualityPreference.low:
+        return qualityLow;
+      case AudioQualityPreference.standard:
+        return qualityStandard;
+      case AudioQualityPreference.high:
+        return qualityHigh;
+    }
+  }
+
+  String sortLabel(RecordingSort sort) {
+    switch (sort) {
+      case RecordingSort.newest:
+        return sortNewest;
+      case RecordingSort.oldest:
+        return sortOldest;
+      case RecordingSort.longest:
+        return sortLongest;
+      case RecordingSort.title:
+        return sortTitle;
     }
   }
 
@@ -194,10 +253,8 @@ class AppStrings {
 
   String formatDuration(Duration duration) {
     final hours = duration.inHours;
-    final minutes =
-        duration.inMinutes.remainder(60).toString().padLeft(2, '0');
-    final seconds =
-        duration.inSeconds.remainder(60).toString().padLeft(2, '0');
+    final minutes = duration.inMinutes.remainder(60).toString().padLeft(2, '0');
+    final seconds = duration.inSeconds.remainder(60).toString().padLeft(2, '0');
     if (hours > 0) {
       return '${hours.toString().padLeft(2, '0')}:$minutes:$seconds';
     }
@@ -302,8 +359,7 @@ const _fr = {
   'tabFavorites': 'Préféré',
   'emptyList': 'Liste vide',
   'myRecordings': 'Mes enregistrements',
-  'emptySubtitle':
-      'Commencez un enregistrement manuel avec votre microphone.',
+  'emptySubtitle': 'Commencez un enregistrement manuel avec votre microphone.',
   'recordMeeting': 'Enregistrer réunion',
   'recordMeetingSubtitle':
       'Enregistrez des réunions ou conversations avec votre microphone',
@@ -327,14 +383,16 @@ const _fr = {
   'recordingTypeIncoming': 'Note appel entrant',
   'recordingTypeOutgoing': 'Note appel sortant',
   'recordingTypeVoice': 'Note vocale',
+  'recordingTypeLogged': 'Journal d\'appel',
   'badgeMeeting': 'Réunion',
   'badgeIncoming': 'Entrant',
   'badgeOutgoing': 'Sortant',
   'badgeVoice': 'Vocale',
+  'badgeLogged': 'Journal',
   'callNoteSheetTitle': 'Enregistrer une note d\'appel',
   'callNoteSheetSubtitle':
       'Choisissez le type de note que vous souhaitez enregistrer '
-          'manuellement après un appel.',
+      'manuellement après un appel.',
   'callNoteIncomingSubtitle': 'Résumé ou note après un appel reçu',
   'callNoteOutgoingSubtitle': 'Résumé ou note après un appel passé',
   'callNoteVoiceSubtitle': 'Note vocale générale',
@@ -376,16 +434,16 @@ const _fr = {
   'micRequired': 'Microphone requis',
   'micRequiredBody':
       'L\'accès au microphone est nécessaire pour enregistrer '
-          'des notes vocales et des réunions.',
+      'des notes vocales et des réunions.',
   'allow': 'Autoriser',
   'deleteRecordingTitle': 'Supprimer l\'enregistrement ?',
   'deleteRecordingBody': 'Cette action est irréversible.',
   'confirm': 'Confirmer',
   'disclaimer':
       'Cette application enregistre des notes vocales et des réunions '
-          'via votre microphone. Elle n\'enregistre pas automatiquement '
-          'les appels cellulaires iPhone. Obtenez toujours le '
-          'consentement avant d\'enregistrer des conversations.',
+      'via votre microphone. Elle n\'enregistre pas automatiquement '
+      'les appels cellulaires iPhone. Obtenez toujours le '
+      'consentement avant d\'enregistrer des conversations.',
   'settings': 'Paramètres',
   'recordingMode': 'Mode d\'enregistrement',
   'loading': 'Chargement...',
@@ -401,15 +459,14 @@ const _fr = {
   'rateFiveStars': 'Note 5 étoiles',
   'drawerSafetyBanner':
       'Cette application n\'enregistre pas automatiquement les appels '
-          'cellulaires iPhone.',
+      'cellulaires iPhone.',
   'shareAppText':
-      'Call Recorder Automatic - Enregistrez des réunions, des notes vocales '
-          'et des résumés après appel.',
-  'adPrivacySettings': 'Paramètres publicitaires',
+      'Recora Automatic Voice Note - Enregistrez des réunions, des notes vocales '
+      'et des résumés après appel.',
   'modeManual': 'Enregistrement manuel',
   'modeMeeting': 'Réunion',
   'modeCallNote': 'Note après appel',
-  'appName': 'Call Recorder Automatic',
+  'appName': 'Recora Automatic Voice Note',
   'onboardingTagline':
       'Enregistrez des réunions, des notes vocales et des résumés après appel.',
   'onboardingManualTitle': 'Enregistrement manuel',
@@ -418,13 +475,13 @@ const _fr = {
   'onboardingMicTitle': 'Microphone uniquement',
   'onboardingMicBody':
       'L\'application utilise le microphone pour enregistrer des notes vocales, '
-          'des réunions et des conversations avec consentement.',
+      'des réunions et des conversations avec consentement.',
   'onboardingImportantTitle': 'Important',
   'onboardingImportantBody':
       'Cette application n\'enregistre pas automatiquement les appels cellulaires iPhone.',
   'onboardingCheckbox':
       'J\'ai compris que l\'application n\'enregistre pas automatiquement '
-          'les appels téléphoniques iPhone.',
+      'les appels téléphoniques iPhone.',
   'safetyStatement':
       'Cette application n\'enregistre pas automatiquement les appels cellulaires iPhone.',
   'localStorage':
@@ -433,25 +490,54 @@ const _fr = {
       'Le partage ne se produit que lorsque vous appuyez sur Partager.',
   'consentResponsibility':
       'Vous êtes responsable d\'obtenir le consentement des personnes '
-          'présentes avant d\'enregistrer une conversation.',
+      'présentes avant d\'enregistrer une conversation.',
   'privacyIntro':
-      'Call Recorder Automatic enregistre des notes vocales, des réunions '
-          'et des résumés après appel uniquement via le microphone de votre '
-          'appareil, lorsque vous appuyez sur le bouton Démarrer.',
+      'Recora Automatic Voice Note enregistre des notes vocales, des réunions '
+      'et des résumés après appel uniquement via le microphone de votre '
+      'appareil, lorsque vous appuyez sur le bouton Démarrer.',
   'consentIntro':
       'Avant chaque enregistrement, assurez-vous que toutes les personnes '
-          'concernées acceptent d\'être enregistrées.',
+      'concernées acceptent d\'être enregistrées.',
   'consentManualStart':
       'L\'enregistrement démarre uniquement lorsque vous appuyez sur '
-          'Démarrer. L\'application ne fonctionne pas en arrière-plan.',
+      'Démarrer. L\'application ne fonctionne pas en arrière-plan.',
   'consentUseFor': 'Utilisez cette application pour :',
   'consentUseBullets':
       '• Enregistrer des réunions avec le microphone\n'
-          '• Sauvegarder des notes vocales après un appel\n'
-          '• Organiser vos enregistrements et notes',
+      '• Sauvegarder des notes vocales après un appel\n'
+      '• Organiser vos enregistrements et notes',
   'aboutDescription':
       'Enregistrez des réunions, des notes vocales et des résumés après '
-          'appel avec votre microphone.',
+      'appel avec votre microphone.',
+  'resume': 'Reprendre',
+  'skipBack': '-10 s',
+  'skipForward': '+10 s',
+  'speed': 'Vitesse',
+  'searchHint': 'Rechercher un enregistrement',
+  'sort': 'Trier',
+  'sortNewest': 'Plus récent',
+  'sortOldest': 'Plus ancien',
+  'sortLongest': 'Plus long',
+  'sortTitle': 'Titre',
+  'noSearchResults': 'Aucun résultat.',
+  'logCall': 'Journal d\'appel',
+  'logCallSubtitle': 'Enregistrer un appel sans audio',
+  'callLogged': 'Appel ajouté au journal.',
+  'autoStart': 'Démarrage automatique',
+  'autoStartBody': 'Lancer l\'enregistrement dès l\'ouverture de l\'écran.',
+  'audioQuality': 'Qualité audio',
+  'qualityLow': 'Basse · 22 kHz',
+  'qualityStandard': 'Standard · 44 kHz',
+  'qualityHigh': 'Haute · 48 kHz',
+  'featureOrganizeTitle': 'Organisation simple',
+  'featureOrganizeBody': 'Classez et retrouvez vos notes rapidement.',
+  'featureIncomingTitle': 'Notes d\'appel',
+  'featureIncomingBody': 'Gardez tous vos résumés au même endroit.',
+  'featureSimpleTitle': 'Interface claire',
+  'featureSimpleBody': 'Un design simple pour une utilisation rapide.',
+  'statsRecordings': 'Notes',
+  'statsTime': 'Durée',
+  'newRecording': 'Nouvelle note',
   'version': 'Version 1.0.0',
 };
 
@@ -468,8 +554,7 @@ const _en = {
   'recordMeetingSubtitle':
       'Record meetings or conversations with your microphone',
   'callNoteAfter': 'Post-call note',
-  'callNoteAfterSubtitle':
-      'Save a voice note or summary after a call',
+  'callNoteAfterSubtitle': 'Save a voice note or summary after a call',
   'defaultBadge': 'Default',
   'emptyCategory': 'No recordings in this category.',
   'language': 'Language',
@@ -480,16 +565,17 @@ const _en = {
   'recordingDeleted': 'Recording deleted.',
   'recordingRemovedFromList': 'Recording removed from list.',
   'fileNotFound': 'File not found.',
-  'ratingUnavailable':
-      'Rating will be available after the app is published.',
+  'ratingUnavailable': 'Rating will be available after the app is published.',
   'recordingTypeMeeting': 'Meeting recording',
   'recordingTypeIncoming': 'Incoming call note',
   'recordingTypeOutgoing': 'Outgoing call note',
   'recordingTypeVoice': 'Voice note',
+  'recordingTypeLogged': 'Call log',
   'badgeMeeting': 'Meeting',
   'badgeIncoming': 'Incoming',
   'badgeOutgoing': 'Outgoing',
   'badgeVoice': 'Voice',
+  'badgeLogged': 'Log',
   'callNoteSheetTitle': 'Record a call note',
   'callNoteSheetSubtitle':
       'Choose the type of note you want to record manually after a call.',
@@ -504,8 +590,7 @@ const _en = {
   'stopAndLeave': 'Stop and leave without saving?',
   'continueAction': 'Continue',
   'leave': 'Leave',
-  'consentBeforeRecord':
-      'Make sure everyone agrees before recording.',
+  'consentBeforeRecord': 'Make sure everyone agrees before recording.',
   'start': 'Start',
   'stop': 'Stop',
   'save': 'Save',
@@ -540,8 +625,8 @@ const _en = {
   'confirm': 'Confirm',
   'disclaimer':
       'This app records voice notes and meetings via your microphone. '
-          'It does not automatically record iPhone cellular calls. '
-          'Always obtain consent before recording conversations.',
+      'It does not automatically record iPhone cellular calls. '
+      'Always obtain consent before recording conversations.',
   'settings': 'Settings',
   'recordingMode': 'Recording mode',
   'loading': 'Loading...',
@@ -558,21 +643,19 @@ const _en = {
   'drawerSafetyBanner':
       'This app does not automatically record iPhone cellular calls.',
   'shareAppText':
-      'Call Recorder Automatic - Record meetings, voice notes, and post-call summaries.',
-  'adPrivacySettings': 'Ad privacy settings',
+      'Recora Automatic Voice Note - Record meetings, voice notes, and post-call summaries.',
   'modeManual': 'Manual recording',
   'modeMeeting': 'Meeting',
   'modeCallNote': 'Post-call note',
-  'appName': 'Call Recorder Automatic',
-  'onboardingTagline':
-      'Record meetings, voice notes, and post-call summaries.',
+  'appName': 'Recora Automatic Voice Note',
+  'onboardingTagline': 'Record meetings, voice notes, and post-call summaries.',
   'onboardingManualTitle': 'Manual recording',
   'onboardingManualBody':
       'Recording starts only when you tap the Start button.',
   'onboardingMicTitle': 'Microphone only',
   'onboardingMicBody':
       'The app uses the microphone to record voice notes, meetings, '
-          'and conversations with consent.',
+      'and conversations with consent.',
   'onboardingImportantTitle': 'Important',
   'onboardingImportantBody':
       'This app does not automatically record iPhone cellular calls.',
@@ -584,10 +667,10 @@ const _en = {
   'sharingPolicy': 'Sharing only happens when you tap Share.',
   'consentResponsibility':
       'You are responsible for obtaining consent from everyone present '
-          'before recording a conversation.',
+      'before recording a conversation.',
   'privacyIntro':
-      'Call Recorder Automatic records voice notes, meetings, and post-call '
-          'summaries only via your device microphone when you tap Start.',
+      'Recora Automatic Voice Note records voice notes, meetings, and post-call '
+      'summaries only via your device microphone when you tap Start.',
   'consentIntro':
       'Before each recording, make sure everyone involved agrees to be recorded.',
   'consentManualStart':
@@ -595,10 +678,39 @@ const _en = {
   'consentUseFor': 'Use this app to:',
   'consentUseBullets':
       '• Record meetings with the microphone\n'
-          '• Save voice notes after a call\n'
-          '• Organize your recordings and notes',
+      '• Save voice notes after a call\n'
+      '• Organize your recordings and notes',
   'aboutDescription':
       'Record meetings, voice notes, and post-call summaries with your microphone.',
+  'resume': 'Resume',
+  'skipBack': '-10s',
+  'skipForward': '+10s',
+  'speed': 'Speed',
+  'searchHint': 'Search recordings',
+  'sort': 'Sort',
+  'sortNewest': 'Newest',
+  'sortOldest': 'Oldest',
+  'sortLongest': 'Longest',
+  'sortTitle': 'Title',
+  'noSearchResults': 'No matching recordings.',
+  'logCall': 'Log a call',
+  'logCallSubtitle': 'Save a call entry without audio',
+  'callLogged': 'Call added to your log.',
+  'autoStart': 'Auto-start recording',
+  'autoStartBody': 'Start capturing as soon as the recorder opens.',
+  'audioQuality': 'Audio quality',
+  'qualityLow': 'Low · 22 kHz',
+  'qualityStandard': 'Standard · 44 kHz',
+  'qualityHigh': 'High · 48 kHz',
+  'featureOrganizeTitle': 'Easy to organize',
+  'featureOrganizeBody': 'Keep recordings nested and sorted.',
+  'featureIncomingTitle': 'Incoming records',
+  'featureIncomingBody': 'All your call notes in one place.',
+  'featureSimpleTitle': 'Simple interface',
+  'featureSimpleBody': 'Clean design for effortless use.',
+  'statsRecordings': 'Notes',
+  'statsTime': 'Time',
+  'newRecording': 'New note',
   'version': 'Version 1.0.0',
 };
 
@@ -630,10 +742,12 @@ const _ar = {
   'recordingTypeIncoming': 'ملاحظة مكالمة واردة',
   'recordingTypeOutgoing': 'ملاحظة مكالمة صادرة',
   'recordingTypeVoice': 'ملاحظة صوتية',
+  'recordingTypeLogged': 'سجل مكالمة',
   'badgeMeeting': 'اجتماع',
   'badgeIncoming': 'واردة',
   'badgeOutgoing': 'صادرة',
   'badgeVoice': 'صوتية',
+  'badgeLogged': 'سجل',
   'callNoteSheetTitle': 'تسجيل ملاحظة مكالمة',
   'callNoteSheetSubtitle':
       'اختر نوع الملاحظة التي تريد تسجيلها يدوياً بعد المكالمة.',
@@ -683,8 +797,8 @@ const _ar = {
   'confirm': 'تأكيد',
   'disclaimer':
       'يسجّل هذا التطبيق الملاحظات الصوتية والاجتماعات عبر الميكروفون. '
-          'لا يسجّل تلقائياً مكالمات iPhone الخلوية. '
-          'احصل دائماً على الموافقة قبل تسجيل المحادثات.',
+      'لا يسجّل تلقائياً مكالمات iPhone الخلوية. '
+      'احصل دائماً على الموافقة قبل تسجيل المحادثات.',
   'settings': 'الإعدادات',
   'recordingMode': 'وضع التسجيل',
   'loading': 'جارٍ التحميل...',
@@ -698,15 +812,13 @@ const _ar = {
   'recordingConsent': 'موافقة التسجيل',
   'about': 'حول',
   'rateFiveStars': 'تقييم 5 نجوم',
-  'drawerSafetyBanner':
-      'لا يسجّل هذا التطبيق تلقائياً مكالمات iPhone الخلوية.',
+  'drawerSafetyBanner': 'لا يسجّل هذا التطبيق تلقائياً مكالمات iPhone الخلوية.',
   'shareAppText':
-      'Call Recorder Automatic - سجّل الاجتماعات والملاحظات الصوتية وملخصات ما بعد المكالمة.',
-  'adPrivacySettings': 'إعدادات خصوصية الإعلانات',
+      'Recora Automatic Voice Note - سجّل الاجتماعات والملاحظات الصوتية وملخصات ما بعد المكالمة.',
   'modeManual': 'تسجيل يدوي',
   'modeMeeting': 'اجتماع',
   'modeCallNote': 'ملاحظة بعد المكالمة',
-  'appName': 'Call Recorder Automatic',
+  'appName': 'Recora Automatic Voice Note',
   'onboardingTagline':
       'سجّل الاجتماعات والملاحظات الصوتية وملخصات ما بعد المكالمة.',
   'onboardingManualTitle': 'تسجيل يدوي',
@@ -714,32 +826,59 @@ const _ar = {
   'onboardingMicTitle': 'الميكروفون فقط',
   'onboardingMicBody':
       'يستخدم التطبيق الميكروفون لتسجيل الملاحظات الصوتية والاجتماعات '
-          'والمحادثات بموافقة.',
+      'والمحادثات بموافقة.',
   'onboardingImportantTitle': 'مهم',
   'onboardingImportantBody':
       'لا يسجّل هذا التطبيق تلقائياً مكالمات iPhone الخلوية.',
   'onboardingCheckbox':
       'أفهم أن التطبيق لا يسجّل تلقائياً مكالمات iPhone الهاتفية.',
-  'safetyStatement':
-      'لا يسجّل هذا التطبيق تلقائياً مكالمات iPhone الخلوية.',
+  'safetyStatement': 'لا يسجّل هذا التطبيق تلقائياً مكالمات iPhone الخلوية.',
   'localStorage': 'تُخزَّن التسجيلات الصوتية محلياً على جهازك.',
   'sharingPolicy': 'المشاركة تحدث فقط عند الضغط على مشاركة.',
   'consentResponsibility':
       'أنت مسؤول عن الحصول على موافقة الحاضرين قبل تسجيل محادثة.',
   'privacyIntro':
-      'يسجّل Call Recorder Automatic الملاحظات الصوتية والاجتماعات '
-          'وملخصات ما بعد المكالمة فقط عبر ميكروفون جهازك عند الضغط على بدء.',
-  'consentIntro':
-      'قبل كل تسجيل، تأكد من موافقة جميع المعنيين على التسجيل.',
+      'يسجّل Recora Automatic Voice Note الملاحظات الصوتية والاجتماعات '
+      'وملخصات ما بعد المكالمة فقط عبر ميكروفون جهازك عند الضغط على بدء.',
+  'consentIntro': 'قبل كل تسجيل، تأكد من موافقة جميع المعنيين على التسجيل.',
   'consentManualStart':
       'يبدأ التسجيل فقط عند الضغط على بدء. لا يعمل التطبيق في الخلفية.',
   'consentUseFor': 'استخدم هذا التطبيق من أجل:',
   'consentUseBullets':
       '• تسجيل الاجتماعات بالميكروفون\n'
-          '• حفظ ملاحظات صوتية بعد مكالمة\n'
-          '• تنظيم تسجيلاتك وملاحظاتك',
+      '• حفظ ملاحظات صوتية بعد مكالمة\n'
+      '• تنظيم تسجيلاتك وملاحظاتك',
   'aboutDescription':
       'سجّل الاجتماعات والملاحظات الصوتية وملخصات ما بعد المكالمة بميكروفونك.',
+  'resume': 'استئناف',
+  'skipBack': '-10 ث',
+  'skipForward': '+10 ث',
+  'speed': 'السرعة',
+  'searchHint': 'ابحث في التسجيلات',
+  'sort': 'ترتيب',
+  'sortNewest': 'الأحدث',
+  'sortOldest': 'الأقدم',
+  'sortLongest': 'الأطول',
+  'sortTitle': 'العنوان',
+  'noSearchResults': 'لا توجد نتائج.',
+  'logCall': 'سجل مكالمة',
+  'logCallSubtitle': 'حفظ مكالمة بدون صوت',
+  'callLogged': 'تمت إضافة المكالمة إلى السجل.',
+  'autoStart': 'بدء تلقائي',
+  'autoStartBody': 'ابدأ التسجيل فور فتح الشاشة.',
+  'audioQuality': 'جودة الصوت',
+  'qualityLow': 'منخفضة · 22 كيلوهرتز',
+  'qualityStandard': 'قياسية · 44 كيلوهرتز',
+  'qualityHigh': 'عالية · 48 كيلوهرتز',
+  'featureOrganizeTitle': 'تنظيم سهل',
+  'featureOrganizeBody': 'رتّب ملاحظاتك واعثر عليها بسرعة.',
+  'featureIncomingTitle': 'سجلات المكالمات',
+  'featureIncomingBody': 'كل ملاحظاتك في مكان واحد.',
+  'featureSimpleTitle': 'واجهة بسيطة',
+  'featureSimpleBody': 'تصميم واضح وسهل الاستخدام.',
+  'statsRecordings': 'ملاحظات',
+  'statsTime': 'المدة',
+  'newRecording': 'ملاحظة جديدة',
   'version': 'الإصدار 1.0.0',
 };
 
@@ -753,8 +892,7 @@ const _es = {
   'myRecordings': 'Mis grabaciones',
   'emptySubtitle': 'Inicia una grabación manual con tu micrófono.',
   'recordMeeting': 'Grabar reunión',
-  'recordMeetingSubtitle':
-      'Graba reuniones o conversaciones con tu micrófono',
+  'recordMeetingSubtitle': 'Graba reuniones o conversaciones con tu micrófono',
   'callNoteAfter': 'Nota tras llamada',
   'callNoteAfterSubtitle':
       'Guarda una nota de voz o un resumen después de una llamada',
@@ -762,8 +900,7 @@ const _es = {
   'emptyCategory': 'No hay grabaciones en esta categoría.',
   'language': 'Idioma',
   'selectLanguage': 'Elegir idioma',
-  'micPermissionRequired':
-      'Se requiere permiso del micrófono para grabar.',
+  'micPermissionRequired': 'Se requiere permiso del micrófono para grabar.',
   'audioSaveFailed': 'No se pudo guardar el archivo de audio.',
   'recordingSaved': 'Grabación guardada.',
   'recordingDeleted': 'Grabación eliminada.',
@@ -775,10 +912,12 @@ const _es = {
   'recordingTypeIncoming': 'Nota de llamada entrante',
   'recordingTypeOutgoing': 'Nota de llamada saliente',
   'recordingTypeVoice': 'Nota de voz',
+  'recordingTypeLogged': 'Registro de llamada',
   'badgeMeeting': 'Reunión',
   'badgeIncoming': 'Entrante',
   'badgeOutgoing': 'Saliente',
   'badgeVoice': 'Voz',
+  'badgeLogged': 'Registro',
   'callNoteSheetTitle': 'Grabar una nota de llamada',
   'callNoteSheetSubtitle':
       'Elige el tipo de nota que deseas grabar manualmente después de una llamada.',
@@ -829,8 +968,8 @@ const _es = {
   'confirm': 'Confirmar',
   'disclaimer':
       'Esta aplicación graba notas de voz y reuniones con tu micrófono. '
-          'No graba automáticamente llamadas celulares de iPhone. '
-          'Obtén siempre el consentimiento antes de grabar conversaciones.',
+      'No graba automáticamente llamadas celulares de iPhone. '
+      'Obtén siempre el consentimiento antes de grabar conversaciones.',
   'settings': 'Ajustes',
   'recordingMode': 'Modo de grabación',
   'loading': 'Cargando...',
@@ -847,12 +986,11 @@ const _es = {
   'drawerSafetyBanner':
       'Esta aplicación no graba automáticamente llamadas celulares de iPhone.',
   'shareAppText':
-      'Call Recorder Automatic - Graba reuniones, notas de voz y resúmenes tras llamadas.',
-  'adPrivacySettings': 'Privacidad de anuncios',
+      'Recora Automatic Voice Note - Graba reuniones, notas de voz y resúmenes tras llamadas.',
   'modeManual': 'Grabación manual',
   'modeMeeting': 'Reunión',
   'modeCallNote': 'Nota tras llamada',
-  'appName': 'Call Recorder Automatic',
+  'appName': 'Recora Automatic Voice Note',
   'onboardingTagline':
       'Graba reuniones, notas de voz y resúmenes tras llamadas.',
   'onboardingManualTitle': 'Grabación manual',
@@ -861,7 +999,7 @@ const _es = {
   'onboardingMicTitle': 'Solo micrófono',
   'onboardingMicBody':
       'La aplicación usa el micrófono para grabar notas de voz, reuniones '
-          'y conversaciones con consentimiento.',
+      'y conversaciones con consentimiento.',
   'onboardingImportantTitle': 'Importante',
   'onboardingImportantBody':
       'Esta aplicación no graba automáticamente llamadas celulares de iPhone.',
@@ -874,10 +1012,10 @@ const _es = {
   'sharingPolicy': 'Compartir solo ocurre cuando pulsas Compartir.',
   'consentResponsibility':
       'Eres responsable de obtener el consentimiento de las personas presentes '
-          'antes de grabar una conversación.',
+      'antes de grabar una conversación.',
   'privacyIntro':
-      'Call Recorder Automatic graba notas de voz, reuniones y resúmenes tras '
-          'llamadas solo con el micrófono de tu dispositivo cuando pulsas Iniciar.',
+      'Recora Automatic Voice Note graba notas de voz, reuniones y resúmenes tras '
+      'llamadas solo con el micrófono de tu dispositivo cuando pulsas Iniciar.',
   'consentIntro':
       'Antes de cada grabación, asegúrate de que todas las personas involucradas acepten ser grabadas.',
   'consentManualStart':
@@ -885,9 +1023,38 @@ const _es = {
   'consentUseFor': 'Usa esta aplicación para:',
   'consentUseBullets':
       '• Grabar reuniones con el micrófono\n'
-          '• Guardar notas de voz después de una llamada\n'
-          '• Organizar tus grabaciones y notas',
+      '• Guardar notas de voz después de una llamada\n'
+      '• Organizar tus grabaciones y notas',
   'aboutDescription':
       'Graba reuniones, notas de voz y resúmenes tras llamadas con tu micrófono.',
+  'resume': 'Reanudar',
+  'skipBack': '-10 s',
+  'skipForward': '+10 s',
+  'speed': 'Velocidad',
+  'searchHint': 'Buscar grabaciones',
+  'sort': 'Ordenar',
+  'sortNewest': 'Más reciente',
+  'sortOldest': 'Más antiguo',
+  'sortLongest': 'Más largo',
+  'sortTitle': 'Título',
+  'noSearchResults': 'Sin resultados.',
+  'logCall': 'Registrar llamada',
+  'logCallSubtitle': 'Guardar una llamada sin audio',
+  'callLogged': 'Llamada añadida al registro.',
+  'autoStart': 'Inicio automático',
+  'autoStartBody': 'Empezar a grabar al abrir la pantalla.',
+  'audioQuality': 'Calidad de audio',
+  'qualityLow': 'Baja · 22 kHz',
+  'qualityStandard': 'Estándar · 44 kHz',
+  'qualityHigh': 'Alta · 48 kHz',
+  'featureOrganizeTitle': 'Fácil de organizar',
+  'featureOrganizeBody': 'Ordena y encuentra tus notas rápido.',
+  'featureIncomingTitle': 'Notas de llamada',
+  'featureIncomingBody': 'Todas tus notas en un solo lugar.',
+  'featureSimpleTitle': 'Interfaz simple',
+  'featureSimpleBody': 'Diseño limpio y fácil de usar.',
+  'statsRecordings': 'Notas',
+  'statsTime': 'Tiempo',
+  'newRecording': 'Nueva nota',
   'version': 'Versión 1.0.0',
 };

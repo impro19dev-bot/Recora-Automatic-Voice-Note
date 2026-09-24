@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../core/theme/app_colors.dart';
 import '../../l10n/locale_scope.dart';
-import '../../services/interstitial_ad_gate_service.dart';
 import '../../widgets/app_logo.dart';
-import '../../widgets/gradient_app_bar.dart';
 import '../../widgets/legal_safety_content.dart';
 
 class AboutScreen extends StatelessWidget {
@@ -15,24 +13,19 @@ class AboutScreen extends StatelessWidget {
     final l10n = context.l10n;
 
     return Scaffold(
-      appBar: GradientAppBar(
-        title: l10n.about,
-        leadingIcon: Icons.arrow_back,
-        onMenuTap: () => InterstitialAdGateService.instance.runBeforeBack(
-          () => Navigator.pop(context),
-        ),
-      ),
+      appBar: AppBar(title: Text(l10n.about)),
       body: ListView(
         padding: const EdgeInsets.all(24),
         children: [
-          const Center(child: AppLogo(size: 100)),
+          const Center(child: AppLogo(size: 100, showGlow: true)),
           const SizedBox(height: 20),
           Text(
             l10n.appName,
             textAlign: TextAlign.center,
             style: const TextStyle(
-              fontSize: 22,
-              fontWeight: FontWeight.bold,
+              fontSize: 26,
+              fontWeight: FontWeight.w700,
+              letterSpacing: -0.5,
               color: AppColors.textPrimary,
             ),
           ),

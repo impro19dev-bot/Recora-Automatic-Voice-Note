@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 enum AppLocale {
-  fr('fr', 'Français'),
   en('en', 'English'),
+  fr('fr', 'Français'),
   ar('ar', 'العربية'),
   es('es', 'Español');
 
@@ -14,10 +14,10 @@ enum AppLocale {
   Locale get flutterLocale => Locale(code);
 
   static AppLocale fromCode(String? code) {
-    if (code == null) return AppLocale.fr;
+    if (code == null) return AppLocale.en;
     for (final locale in AppLocale.values) {
       if (locale.code == code) return locale;
     }
-    return AppLocale.fr;
+    return AppLocale.en;
   }
 }

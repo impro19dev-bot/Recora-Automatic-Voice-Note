@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import '../../core/theme/app_colors.dart';
 import '../../l10n/locale_scope.dart';
 import '../../models/recording_item.dart';
-import '../../services/interstitial_ad_gate_service.dart';
-import '../../services/rewarded_ad_gate_service.dart';
 import 'recording_type.dart';
 
 class EditRecordingSheet extends StatefulWidget {
@@ -29,8 +27,9 @@ class _EditRecordingSheetState extends State<EditRecordingSheet> {
     _selectedType = widget.item.type;
     _isFavorite = widget.item.isFavorite;
     _titleController = TextEditingController(text: widget.item.title);
-    _contactController =
-        TextEditingController(text: widget.item.contactName ?? '');
+    _contactController = TextEditingController(
+      text: widget.item.contactName ?? '',
+    );
     _noteController = TextEditingController(text: widget.item.note ?? '');
   }
 
@@ -44,7 +43,7 @@ class _EditRecordingSheetState extends State<EditRecordingSheet> {
 
   void _save() {
     if (_titleController.text.trim().isEmpty) return;
-    RewardedAdGateService.instance.runBeforeEditRecording(_completeSave);
+    _completeSave();
   }
 
   void _completeSave() {
@@ -80,7 +79,8 @@ class _EditRecordingSheetState extends State<EditRecordingSheet> {
         left: 20,
         right: 20,
         top: 16,
-        bottom: MediaQuery.viewInsetsOf(context).bottom +
+        bottom:
+            MediaQuery.viewInsetsOf(context).bottom +
             MediaQuery.viewPaddingOf(context).bottom +
             24,
       ),
@@ -103,8 +103,9 @@ class _EditRecordingSheetState extends State<EditRecordingSheet> {
             Text(
               l10n.edit,
               style: const TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.w600,
+                fontSize: 22,
+                fontWeight: FontWeight.w700,
+                letterSpacing: -0.3,
                 color: AppColors.textPrimary,
               ),
             ),
@@ -176,8 +177,7 @@ class _EditRecordingSheetState extends State<EditRecordingSheet> {
                     style: OutlinedButton.styleFrom(
                       minimumSize: const Size(0, 48),
                     ),
-                    onPressed: () => InterstitialAdGateService.instance
-                        .runBeforeCancel(() => Navigator.pop(context)),
+                    onPressed: () => Navigator.pop(context),
                     child: Text(l10n.cancel),
                   ),
                 ),
@@ -209,7 +209,7 @@ Future<RecordingItem?> showEditRecordingSheet(
     context: context,
     isScrollControlled: true,
     shape: const RoundedRectangleBorder(
-      borderRadius: BorderRadius.vertical(top: Radius.circular(18)),
+      borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
     ),
     builder: (context) => EditRecordingSheet(item: item),
   );

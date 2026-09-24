@@ -23,6 +23,8 @@ class RecordingItem {
   final String? note;
   final bool isFavorite;
 
+  bool get hasAudio => type.hasAudio && filePath.isNotEmpty;
+
   Map<String, dynamic> toJson() {
     return {
       'id': id,
@@ -39,8 +41,8 @@ class RecordingItem {
 
   factory RecordingItem.fromJson(Map<String, dynamic> json) {
     final typeName = json['type'] as String?;
-    final type = RecordingType.fromName(typeName ?? '') ??
-        RecordingType.voiceNote;
+    final type =
+        RecordingType.fromName(typeName ?? '') ?? RecordingType.voiceNote;
 
     return RecordingItem(
       id: json['id'] as String,
@@ -49,8 +51,8 @@ class RecordingItem {
       duration: Duration(
         milliseconds: (json['durationMs'] as num?)?.toInt() ?? 0,
       ),
-      createdAt: DateTime.tryParse(json['date'] as String? ?? '') ??
-          DateTime.now(),
+      createdAt:
+          DateTime.tryParse(json['date'] as String? ?? '') ?? DateTime.now(),
       filePath: json['filePath'] as String? ?? '',
       contactName: json['contact'] as String?,
       note: json['note'] as String?,
@@ -61,6 +63,7 @@ class RecordingItem {
   RecordingItem copyWith({
     String? title,
     RecordingType? type,
+    Duration? duration,
     String? contactName,
     String? note,
     bool? isFavorite,
@@ -69,7 +72,7 @@ class RecordingItem {
       id: id,
       title: title ?? this.title,
       type: type ?? this.type,
-      duration: duration,
+      duration: duration ?? this.duration,
       createdAt: createdAt,
       filePath: filePath,
       contactName: contactName ?? this.contactName,

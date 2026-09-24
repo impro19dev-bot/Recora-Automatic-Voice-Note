@@ -4,8 +4,6 @@ import 'package:uuid/uuid.dart';
 import '../../core/theme/app_colors.dart';
 import '../../l10n/locale_scope.dart';
 import '../../models/recording_item.dart';
-import '../../services/interstitial_ad_gate_service.dart';
-import '../../services/rewarded_ad_gate_service.dart';
 import 'recording_screen.dart';
 import 'recording_type.dart';
 
@@ -39,8 +37,7 @@ class _SaveRecordingSheetState extends State<SaveRecordingSheet> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     if (!_titleInitialized) {
-      _titleController.text =
-          context.l10n.recordingTypeTitle(_selectedType);
+      _titleController.text = context.l10n.recordingTypeTitle(_selectedType);
       _titleInitialized = true;
     }
   }
@@ -63,7 +60,7 @@ class _SaveRecordingSheetState extends State<SaveRecordingSheet> {
 
   void _save() {
     if (_titleController.text.trim().isEmpty) return;
-    RewardedAdGateService.instance.runBeforeSaveRegistration(_completeSave);
+    _completeSave();
   }
 
   void _completeSave() {
@@ -100,7 +97,8 @@ class _SaveRecordingSheetState extends State<SaveRecordingSheet> {
         left: 20,
         right: 20,
         top: 16,
-        bottom: MediaQuery.viewInsetsOf(context).bottom +
+        bottom:
+            MediaQuery.viewInsetsOf(context).bottom +
             MediaQuery.viewPaddingOf(context).bottom +
             24,
       ),
@@ -123,8 +121,9 @@ class _SaveRecordingSheetState extends State<SaveRecordingSheet> {
             Text(
               l10n.save,
               style: const TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.w600,
+                fontSize: 22,
+                fontWeight: FontWeight.w700,
+                letterSpacing: -0.3,
                 color: AppColors.textPrimary,
               ),
             ),
@@ -200,8 +199,7 @@ class _SaveRecordingSheetState extends State<SaveRecordingSheet> {
                     style: OutlinedButton.styleFrom(
                       minimumSize: const Size(0, 48),
                     ),
-                    onPressed: () => InterstitialAdGateService.instance
-                        .runBeforeCancel(() => Navigator.pop(context)),
+                    onPressed: () => Navigator.pop(context),
                     child: Text(l10n.cancel),
                   ),
                 ),
@@ -233,7 +231,7 @@ Future<RecordingItem?> showSaveRecordingSheet(
     context: context,
     isScrollControlled: true,
     shape: const RoundedRectangleBorder(
-      borderRadius: BorderRadius.vertical(top: Radius.circular(18)),
+      borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
     ),
     builder: (context) => SaveRecordingSheet(session: session),
   );

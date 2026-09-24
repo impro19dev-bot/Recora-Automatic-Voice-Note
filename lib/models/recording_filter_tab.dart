@@ -1,6 +1,1 @@
-enum RecordingFilterTab {
-  all,
-  incoming,
-  outgoing,
-  favorites,
-}
+enum RecordingFilterTab { all, incoming, outgoing, favorites }

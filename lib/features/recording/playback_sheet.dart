@@ -9,7 +9,6 @@ import '../../core/theme/app_colors.dart';
 import '../../l10n/locale_scope.dart';
 import '../../models/recording_item.dart';
 import '../../services/audio_player_service.dart';
-import '../../services/interstitial_ad_gate_service.dart';
 import '../../services/recording_storage_service.dart';
 import '../../services/recordings_repository.dart';
 import '../../widgets/permission_dialog.dart';
@@ -48,6 +47,7 @@ class _PlaybackSheetState extends State<PlaybackSheet> {
   bool _fileMissing = false;
   bool _loadFailed = false;
   bool _isSeeking = false;
+  double _speed = 1;
   late RecordingItem _item;
 
   @override
@@ -58,6 +58,10 @@ class _PlaybackSheetState extends State<PlaybackSheet> {
   }
 
   Future<void> _initPlayer() async {
+    if (!_item.hasAudio) {
+      setState(() => _fileMissing = true);
+      return;
+    }
     final exists = await _storage.fileExists(_item.filePath);
     if (!mounted) return;
 
@@ -144,7 +148,7 @@ class _PlaybackSheetState extends State<PlaybackSheet> {
   }
 
   Future<void> _delete() async {
-    InterstitialAdGateService.instance.runBeforeDelete(_performDelete);
+    await _performDelete();
   }
 
   Future<void> _performDelete() async {
@@ -163,7 +167,7 @@ class _PlaybackSheetState extends State<PlaybackSheet> {
   }
 
   Future<void> _removeMissingFromList() async {
-    InterstitialAdGateService.instance.runBeforeDelete(_performRemoveMissing);
+    await _performRemoveMissing();
   }
 
   Future<void> _performRemoveMissing() async {
@@ -178,7 +182,7 @@ class _PlaybackSheetState extends State<PlaybackSheet> {
   }
 
   Future<void> _share() async {
-    InterstitialAdGateService.instance.runBeforeShare(_performShare);
+    await _performShare();
   }
 
   Future<void> _performShare() async {
@@ -240,8 +244,9 @@ class _PlaybackSheetState extends State<PlaybackSheet> {
               _item.title,
               textAlign: TextAlign.center,
               style: const TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.w600,
+                fontSize: 22,
+                fontWeight: FontWeight.w700,
+                letterSpacing: -0.3,
                 color: AppColors.textPrimary,
               ),
             ),
@@ -266,7 +271,10 @@ class _PlaybackSheetState extends State<PlaybackSheet> {
               ),
             ),
             const SizedBox(height: 16),
-            _InfoRow(label: l10n.duration, value: l10n.formatDuration(_item.duration)),
+            _InfoRow(
+              label: l10n.duration,
+              value: l10n.formatDuration(_item.duration),
+            ),
             _InfoRow(
               label: l10n.date,
               value: l10n.formatRecordingDate(_item.createdAt),
@@ -351,17 +359,61 @@ class _PlaybackSheetState extends State<PlaybackSheet> {
                 ],
               ),
               const SizedBox(height: 12),
-              FilledButton.icon(
-                style: FilledButton.styleFrom(
-                  backgroundColor: AppColors.primary,
-                  minimumSize: const Size(double.infinity, 48),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
+              Row(
+                children: [
+                  Expanded(
+                    child: OutlinedButton(
+                      onPressed: () async {
+                        final next = _position - const Duration(seconds: 10);
+                        await _playerService.seek(
+                          next.isNegative ? Duration.zero : next,
+                        );
+                      },
+                      child: Text(l10n.skipBack),
+                    ),
                   ),
-                ),
-                onPressed: _togglePlayback,
-                icon: Icon(_isPlaying ? Icons.pause : Icons.play_arrow),
-                label: Text(_isPlaying ? l10n.pause : l10n.play),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    flex: 2,
+                    child: FilledButton.icon(
+                      onPressed: _togglePlayback,
+                      icon: Icon(_isPlaying ? Icons.pause : Icons.play_arrow),
+                      label: Text(_isPlaying ? l10n.pause : l10n.play),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: OutlinedButton(
+                      onPressed: () async {
+                        await _playerService.seek(
+                          _position + const Duration(seconds: 10),
+                        );
+                      },
+                      child: Text(l10n.skipForward),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 10),
+              Wrap(
+                spacing: 8,
+                children: [0.75, 1.0, 1.5, 2.0].map((speed) {
+                  final selected = _speed == speed;
+                  return ChoiceChip(
+                    label: Text('${speed}x'),
+                    selected: selected,
+                    selectedColor: AppColors.crimson,
+                    labelStyle: TextStyle(
+                      color: selected
+                          ? AppColors.appBarForeground
+                          : AppColors.textPrimary,
+                    ),
+                    onSelected: (_) async {
+                      await _playerService.setSpeed(speed);
+                      setState(() => _speed = speed);
+                    },
+                  );
+                }).toList(),
               ),
             ],
             const SizedBox(height: 16),
@@ -461,7 +513,7 @@ Future<void> showPlaybackSheet(
     context: context,
     isScrollControlled: true,
     shape: const RoundedRectangleBorder(
-      borderRadius: BorderRadius.vertical(top: Radius.circular(18)),
+      borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
     ),
     builder: (context) => PlaybackSheet(
       item: item,

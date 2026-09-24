@@ -5,14 +5,15 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/recording_filter_tab.dart';
 import '../models/recording_item.dart';
+import '../models/recording_sort.dart';
 import '../features/recording/recording_type.dart';
 import 'recording_storage_service.dart';
 
 class RecordingsRepository extends ChangeNotifier {
   RecordingsRepository({RecordingStorageService? storage})
-      : _storage = storage ?? RecordingStorageService();
+    : _storage = storage ?? RecordingStorageService();
 
-  static const _storageKey = 'recordings_metadata';
+  static const _storageKey = 'recora_recordings_metadata';
 
   final RecordingStorageService _storage;
   final List<RecordingItem> _items = [];
@@ -31,26 +32,58 @@ class RecordingsRepository extends ChangeNotifier {
     return null;
   }
 
-  List<RecordingItem> forTab(RecordingFilterTab tab) {
+  int get count => _items.length;
+
+  Duration get totalDuration => _items.fold<Duration>(
+        Duration.zero,
+        (sum, item) => sum + item.duration,
+      );
+
+  int get favoriteCount => _items.where((item) => item.isFavorite).length;
+
+  List<RecordingItem> forTab(
+    RecordingFilterTab tab, {
+    String query = '',
+    RecordingSort sort = RecordingSort.newest,
+  }) {
+    Iterable<RecordingItem> source = _items;
     switch (tab) {
       case RecordingFilterTab.all:
-        return _sorted(_items);
+        break;
       case RecordingFilterTab.incoming:
-        return _sorted(
-          _items.where((item) => item.type == RecordingType.incomingNote),
-        );
+        source = source.where((item) => item.type == RecordingType.incomingNote);
       case RecordingFilterTab.outgoing:
-        return _sorted(
-          _items.where((item) => item.type == RecordingType.outgoingNote),
-        );
+        source = source.where((item) => item.type == RecordingType.outgoingNote);
       case RecordingFilterTab.favorites:
-        return _sorted(_items.where((item) => item.isFavorite));
+        source = source.where((item) => item.isFavorite);
     }
+
+    final needle = query.trim().toLowerCase();
+    if (needle.isNotEmpty) {
+      source = source.where((item) {
+        return item.title.toLowerCase().contains(needle) ||
+            (item.contactName?.toLowerCase().contains(needle) ?? false) ||
+            (item.note?.toLowerCase().contains(needle) ?? false);
+      });
+    }
+
+    return _sorted(source, sort);
   }
 
-  List<RecordingItem> _sorted(Iterable<RecordingItem> source) {
-    final list = source.toList()
-      ..sort((a, b) => b.createdAt.compareTo(a.createdAt));
+  List<RecordingItem> _sorted(Iterable<RecordingItem> source, RecordingSort sort) {
+    final list = source.toList();
+    switch (sort) {
+      case RecordingSort.newest:
+        list.sort((a, b) => b.createdAt.compareTo(a.createdAt));
+      case RecordingSort.oldest:
+        list.sort((a, b) => a.createdAt.compareTo(b.createdAt));
+      case RecordingSort.longest:
+        list.sort((a, b) => b.duration.compareTo(a.duration));
+      case RecordingSort.title:
+        list.sort(
+          (a, b) => a.title.toLowerCase().compareTo(b.title.toLowerCase()),
+        );
+    }
     return list;
   }
 
@@ -77,9 +110,7 @@ class RecordingsRepository extends ChangeNotifier {
       for (final entry in decoded) {
         if (entry is! Map) continue;
         try {
-          loaded.add(
-            RecordingItem.fromJson(Map<String, dynamic>.from(entry)),
-          );
+          loaded.add(RecordingItem.fromJson(Map<String, dynamic>.from(entry)));
         } catch (error) {
           debugPrint('Skipping invalid recording entry: $error');
         }

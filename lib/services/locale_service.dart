@@ -8,7 +8,7 @@ class LocaleService extends ChangeNotifier {
   LocaleService(this._preferences);
 
   final AppPreferencesService _preferences;
-  AppLocale _locale = AppLocale.fr;
+  AppLocale _locale = AppLocale.en;
   bool _isLoaded = false;
 
   AppLocale get locale => _locale;

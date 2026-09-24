@@ -11,8 +11,7 @@ class LocaleScope extends InheritedNotifier<LocaleService> {
   }) : super(notifier: localeService);
 
   static LocaleService serviceOf(BuildContext context) {
-    final scope =
-        context.dependOnInheritedWidgetOfExactType<LocaleScope>();
+    final scope = context.dependOnInheritedWidgetOfExactType<LocaleScope>();
     assert(scope != null, 'LocaleScope not found in widget tree');
     return scope!.notifier!;
   }

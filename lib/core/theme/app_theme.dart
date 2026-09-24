@@ -6,11 +6,11 @@ import 'app_colors.dart';
 abstract final class AppTheme {
   static ThemeData get light {
     final colorScheme = ColorScheme.light(
-      primary: AppColors.primary,
+      primary: AppColors.crimson,
       onPrimary: AppColors.appBarForeground,
-      primaryContainer: AppColors.primaryLight.withValues(alpha: 0.25),
-      onPrimaryContainer: AppColors.primaryDark,
-      secondary: AppColors.brandMaroonLight,
+      primaryContainer: AppColors.chipBackground,
+      onPrimaryContainer: AppColors.crimsonDark,
+      secondary: AppColors.crimson,
       onSecondary: AppColors.appBarForeground,
       surface: AppColors.surface,
       onSurface: AppColors.textPrimary,
@@ -24,87 +24,84 @@ abstract final class AppTheme {
       useMaterial3: true,
       brightness: Brightness.light,
       colorScheme: colorScheme,
-      scaffoldBackgroundColor: AppColors.background,
+      scaffoldBackgroundColor: AppColors.surface,
       canvasColor: AppColors.surface,
       dividerColor: AppColors.divider,
-      primaryColor: AppColors.primary,
+      primaryColor: AppColors.crimson,
       appBarTheme: const AppBarTheme(
         elevation: 0,
         centerTitle: false,
         foregroundColor: AppColors.appBarForeground,
-        backgroundColor: AppColors.gradientStart,
+        backgroundColor: AppColors.crimson,
         systemOverlayStyle: SystemUiOverlayStyle(
-          statusBarColor: AppColors.statusBarPurple,
+          statusBarColor: AppColors.crimsonDark,
           statusBarIconBrightness: Brightness.light,
           statusBarBrightness: Brightness.dark,
         ),
       ),
-      drawerTheme: const DrawerThemeData(
+      navigationBarTheme: const NavigationBarThemeData(
         backgroundColor: AppColors.surface,
-        width: 320,
-      ),
-      cardTheme: CardThemeData(
-        color: AppColors.surface,
+        indicatorColor: Colors.transparent,
         elevation: 0,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-          side: const BorderSide(color: AppColors.border),
+        height: 64,
+        labelTextStyle: WidgetStatePropertyAll(
+          TextStyle(fontSize: 11, fontWeight: FontWeight.w600),
         ),
-      ),
-      listTileTheme: const ListTileThemeData(
-        contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 2),
-        iconColor: AppColors.textSecondary,
-        titleTextStyle: TextStyle(
-          color: AppColors.textPrimary,
-          fontSize: 16,
-          fontWeight: FontWeight.w500,
-        ),
-        subtitleTextStyle: TextStyle(
-          color: AppColors.textSecondary,
-          fontSize: 13,
-        ),
-      ),
-      bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-        backgroundColor: AppColors.surface,
-        selectedItemColor: AppColors.primary,
-        unselectedItemColor: AppColors.iconMuted,
-        type: BottomNavigationBarType.fixed,
-        elevation: 0,
       ),
       filledButtonTheme: FilledButtonThemeData(
         style: FilledButton.styleFrom(
-          backgroundColor: AppColors.primary,
+          backgroundColor: AppColors.crimson,
           foregroundColor: AppColors.appBarForeground,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(24),
           ),
         ),
       ),
-      switchTheme: SwitchThemeData(
-        thumbColor: WidgetStateProperty.resolveWith((states) {
-          if (states.contains(WidgetState.selected)) {
-            return AppColors.primary;
-          }
-          return AppColors.iconMuted;
-        }),
-        trackColor: WidgetStateProperty.resolveWith((states) {
-          if (states.contains(WidgetState.selected)) {
-            return AppColors.primary.withValues(alpha: 0.35);
-          }
-          return AppColors.border;
-        }),
+      outlinedButtonTheme: OutlinedButtonThemeData(
+        style: OutlinedButton.styleFrom(
+          foregroundColor: AppColors.crimson,
+          side: const BorderSide(color: AppColors.border),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(24),
+          ),
+        ),
       ),
-      sliderTheme: SliderThemeData(
-        activeTrackColor: AppColors.primary,
+      inputDecorationTheme: InputDecorationTheme(
+        filled: true,
+        fillColor: AppColors.borderLight,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(14),
+          borderSide: BorderSide.none,
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(14),
+          borderSide: BorderSide.none,
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(14),
+          borderSide: const BorderSide(color: AppColors.crimson, width: 1.2),
+        ),
+      ),
+      sliderTheme: const SliderThemeData(
+        activeTrackColor: AppColors.crimson,
         inactiveTrackColor: AppColors.border,
-        thumbColor: AppColors.primary,
-        overlayColor: AppColors.primarySoft,
+        thumbColor: AppColors.crimson,
       ),
       snackBarTheme: SnackBarThemeData(
-        backgroundColor: AppColors.textPrimary,
-        contentTextStyle: const TextStyle(color: AppColors.surface),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        backgroundColor: AppColors.ink,
+        contentTextStyle: const TextStyle(color: AppColors.appBarForeground),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         behavior: SnackBarBehavior.floating,
+      ),
+      dialogTheme: DialogThemeData(
+        backgroundColor: AppColors.surface,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
+      ),
+      bottomSheetTheme: const BottomSheetThemeData(
+        backgroundColor: AppColors.surface,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(top: Radius.circular(22)),
+        ),
       ),
     );
   }

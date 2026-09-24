@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
 
-import '../../core/theme/app_colors.dart';
-import '../../l10n/locale_scope.dart';
-import '../../services/interstitial_ad_gate_service.dart';
-import '../../services/microphone_service.dart';
+import '../core/theme/app_colors.dart';
+import '../l10n/locale_scope.dart';
+import '../services/microphone_service.dart';
 
-/// Shows a pre-request dialog, then triggers the native microphone permission.
-/// Returns `true` when microphone access is granted.
 Future<bool> showMicrophonePermissionDialog(
   BuildContext context,
   MicrophoneService microphoneService,
@@ -21,18 +18,15 @@ Future<bool> showMicrophonePermissionDialog(
     barrierDismissible: false,
     builder: (dialogContext) {
       return AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         title: Text(l10n.micRequired),
         content: Text(l10n.micRequiredBody),
         actions: [
           TextButton(
-            onPressed: () => InterstitialAdGateService.instance.runBeforeCancel(
-              () => Navigator.pop(dialogContext, false),
-            ),
+            onPressed: () => Navigator.pop(dialogContext, false),
             child: Text(l10n.cancel),
           ),
           FilledButton(
-            style: FilledButton.styleFrom(backgroundColor: AppColors.primary),
             onPressed: () => Navigator.pop(dialogContext, true),
             child: Text(l10n.allow),
           ),
@@ -61,14 +55,12 @@ Future<bool> showDeleteRecordingDialog(BuildContext context) async {
     context: context,
     builder: (dialogContext) {
       return AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         title: Text(l10n.deleteRecordingTitle),
         content: Text(l10n.deleteRecordingBody),
         actions: [
           TextButton(
-            onPressed: () => InterstitialAdGateService.instance.runBeforeCancel(
-              () => Navigator.pop(dialogContext, false),
-            ),
+            onPressed: () => Navigator.pop(dialogContext, false),
             child: Text(l10n.cancel),
           ),
           FilledButton(

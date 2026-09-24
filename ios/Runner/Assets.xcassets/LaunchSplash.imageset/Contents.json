@@ -1,17 +1,14 @@
 {
   "images" : [
     {
-      "filename" : "splash_call_recorder.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "splash_call_recorder.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "splash_call_recorder.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

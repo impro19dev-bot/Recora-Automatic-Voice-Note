@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:path_provider/path_provider.dart';
 
 class RecordingStorageService {
-  static const _folderName = 'recordings';
+  static const _folderName = 'recora_notes';
 
   Future<Directory> getRecordingsDirectory() async {
     final appDir = await getApplicationDocumentsDirectory();

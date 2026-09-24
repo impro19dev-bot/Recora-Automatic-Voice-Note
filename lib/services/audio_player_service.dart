@@ -45,5 +45,7 @@ class AudioPlayerService {
 
   Future<void> seek(Duration position) => _player.seek(position);
 
+  Future<void> setSpeed(double speed) => _player.setSpeed(speed);
+
   Future<void> dispose() => _player.dispose();
 }

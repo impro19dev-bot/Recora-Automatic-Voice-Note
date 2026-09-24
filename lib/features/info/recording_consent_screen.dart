@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../../core/theme/app_colors.dart';
 import '../../l10n/locale_scope.dart';
-import '../../services/interstitial_ad_gate_service.dart';
-import '../../widgets/gradient_app_bar.dart';
 import '../../widgets/legal_safety_content.dart';
 
 class RecordingConsentScreen extends StatelessWidget {
@@ -14,27 +12,30 @@ class RecordingConsentScreen extends StatelessWidget {
     final l10n = context.l10n;
 
     return Scaffold(
-      appBar: GradientAppBar(
-        title: l10n.recordingConsent,
-        leadingIcon: Icons.arrow_back,
-        onMenuTap: () => InterstitialAdGateService.instance.runBeforeBack(
-          () => Navigator.pop(context),
-        ),
-      ),
+      appBar: AppBar(title: Text(l10n.recordingConsent)),
       body: ListView(
         padding: const EdgeInsets.all(20),
         children: [
-          const Icon(
-            Icons.verified_user_outlined,
-            size: 48,
-            color: AppColors.primary,
+          Container(
+            width: 64,
+            height: 64,
+            decoration: BoxDecoration(
+              color: AppColors.tealSoft,
+              borderRadius: BorderRadius.circular(18),
+            ),
+            child: const Icon(
+              Icons.verified_user_outlined,
+              size: 32,
+              color: AppColors.teal,
+            ),
           ),
           const SizedBox(height: 16),
           Text(
             l10n.recordingConsent,
             style: const TextStyle(
-              fontSize: 22,
-              fontWeight: FontWeight.bold,
+              fontSize: 24,
+              fontWeight: FontWeight.w700,
+              letterSpacing: -0.4,
               color: AppColors.textPrimary,
             ),
           ),

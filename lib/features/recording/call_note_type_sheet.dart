@@ -2,50 +2,29 @@ import 'package:flutter/material.dart';
 
 import '../../core/theme/app_colors.dart';
 import '../../l10n/locale_scope.dart';
-import '../../services/rewarded_ad_gate_service.dart';
 import 'recording_type.dart';
 
 Future<RecordingType?> showCallNoteTypeSheet(BuildContext context) {
   return showModalBottomSheet<RecordingType>(
     context: context,
-    shape: const RoundedRectangleBorder(
-      borderRadius: BorderRadius.vertical(top: Radius.circular(18)),
-    ),
+    isScrollControlled: true,
+    showDragHandle: true,
     builder: (context) {
       final l10n = context.l10n;
-
-      void selectType(RecordingType type) {
-        RewardedAdGateService.instance.runBeforeCallNoteType(
-          type,
-          () {
-            if (context.mounted) Navigator.pop(context, type);
-          },
-        );
-      }
+      final bottom = MediaQuery.viewPaddingOf(context).bottom;
 
       return SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(20, 12, 20, 20),
+        child: SingleChildScrollView(
+          padding: EdgeInsets.fromLTRB(20, 8, 20, bottom + 20),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Center(
-                child: Container(
-                  width: 40,
-                  height: 4,
-                  decoration: BoxDecoration(
-                    color: AppColors.border,
-                    borderRadius: BorderRadius.circular(2),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 16),
               Text(
                 l10n.callNoteSheetTitle,
                 style: const TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w600,
+                  fontSize: 20,
+                  fontWeight: FontWeight.w700,
                   color: AppColors.textPrimary,
                 ),
               ),
@@ -60,22 +39,22 @@ Future<RecordingType?> showCallNoteTypeSheet(BuildContext context) {
               ),
               const SizedBox(height: 16),
               _OptionTile(
-                icon: Icons.phone_callback,
+                icon: Icons.call_received_rounded,
                 title: l10n.recordingTypeIncoming,
                 subtitle: l10n.callNoteIncomingSubtitle,
-                onTap: () => selectType(RecordingType.incomingNote),
+                onTap: () => Navigator.pop(context, RecordingType.incomingNote),
               ),
               _OptionTile(
-                icon: Icons.phone_forwarded,
+                icon: Icons.call_made_rounded,
                 title: l10n.recordingTypeOutgoing,
                 subtitle: l10n.callNoteOutgoingSubtitle,
-                onTap: () => selectType(RecordingType.outgoingNote),
+                onTap: () => Navigator.pop(context, RecordingType.outgoingNote),
               ),
               _OptionTile(
-                icon: Icons.note_alt_outlined,
+                icon: Icons.sticky_note_2_outlined,
                 title: l10n.recordingTypeVoice,
                 subtitle: l10n.callNoteVoiceSubtitle,
-                onTap: () => selectType(RecordingType.voiceNote),
+                onTap: () => Navigator.pop(context, RecordingType.voiceNote),
               ),
             ],
           ),
@@ -100,18 +79,23 @@ class _OptionTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      contentPadding: EdgeInsets.zero,
-      minVerticalPadding: 12,
-      minTileHeight: 56,
-      leading: CircleAvatar(
-        backgroundColor: AppColors.chipBackground,
-        child: Icon(icon, color: AppColors.primary),
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8),
+      child: ListTile(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+          side: const BorderSide(color: AppColors.border),
+        ),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 2),
+        leading: CircleAvatar(
+          backgroundColor: AppColors.chipBackground,
+          child: Icon(icon, color: AppColors.crimson),
+        ),
+        title: Text(title),
+        subtitle: Text(subtitle),
+        trailing: const Icon(Icons.chevron_right_rounded),
+        onTap: onTap,
       ),
-      title: Text(title),
-      subtitle: Text(subtitle),
-      trailing: const Icon(Icons.chevron_right),
-      onTap: onTap,
     );
   }
 }

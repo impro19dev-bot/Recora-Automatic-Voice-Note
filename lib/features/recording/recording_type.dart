@@ -2,7 +2,8 @@ enum RecordingType {
   meeting,
   incomingNote,
   outgoingNote,
-  voiceNote;
+  voiceNote,
+  loggedCall;
 
   static RecordingType? fromName(String name) {
     for (final type in RecordingType.values) {
@@ -10,4 +11,6 @@ enum RecordingType {
     }
     return null;
   }
+
+  bool get hasAudio => this != RecordingType.loggedCall;
 }

@@ -7,7 +7,6 @@ import 'core/theme/app_theme.dart';
 import 'features/splash/splash_screen.dart';
 import 'l10n/app_locale.dart';
 import 'l10n/locale_scope.dart';
-import 'services/app_open_ad_service.dart';
 import 'services/app_preferences_service.dart';
 import 'services/locale_service.dart';
 
@@ -16,50 +15,36 @@ Future<void> main() async {
 
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(
-      statusBarColor: AppColors.brandMaroon,
+      statusBarColor: AppColors.crimsonDark,
       statusBarIconBrightness: Brightness.light,
       statusBarBrightness: Brightness.dark,
-      systemNavigationBarColor: AppColors.brandMaroon,
-      systemNavigationBarIconBrightness: Brightness.light,
+      systemNavigationBarColor: AppColors.surface,
+      systemNavigationBarIconBrightness: Brightness.dark,
     ),
   );
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
-  runApp(const CallRecorderApp());
+
+  runApp(const RecoraApp());
 }
 
-class CallRecorderApp extends StatefulWidget {
-  const CallRecorderApp({super.key});
+class RecoraApp extends StatefulWidget {
+  const RecoraApp({super.key});
 
   @override
-  State<CallRecorderApp> createState() => _CallRecorderAppState();
+  State<RecoraApp> createState() => _RecoraAppState();
 }
 
-class _CallRecorderAppState extends State<CallRecorderApp>
-    with WidgetsBindingObserver {
+class _RecoraAppState extends State<RecoraApp> {
   late final LocaleService _localeService;
 
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addObserver(this);
     _localeService = LocaleService(AppPreferencesService());
     _localeService.load();
-  }
-
-  @override
-  void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
-    super.dispose();
-  }
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.resumed) {
-      AppOpenAdService.instance.onAppResumed();
-    }
   }
 
   @override
@@ -73,13 +58,20 @@ class _CallRecorderAppState extends State<CallRecorderApp>
             return const MaterialApp(
               debugShowCheckedModeBanner: false,
               home: Scaffold(
-                body: Center(child: CircularProgressIndicator()),
+                body: ColoredBox(
+                  color: AppColors.crimsonDark,
+                  child: Center(
+                    child: CircularProgressIndicator(
+                      color: AppColors.appBarForeground,
+                    ),
+                  ),
+                ),
               ),
             );
           }
 
           return MaterialApp(
-            title: 'Call Recorder Automatic',
+            title: 'Recora Automatic Voice Note',
             debugShowCheckedModeBanner: false,
             theme: AppTheme.light,
             locale: _localeService.locale.flutterLocale,
