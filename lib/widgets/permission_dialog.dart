@@ -13,29 +13,28 @@ Future<bool> showMicrophonePermissionDialog(
   if (await microphoneService.hasPermission) return true;
   if (!context.mounted) return false;
 
-  final shouldRequest = await showDialog<bool>(
+  await showDialog<void>(
     context: context,
     barrierDismissible: false,
     builder: (dialogContext) {
-      return AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        title: Text(l10n.micRequired),
-        content: Text(l10n.micRequiredBody),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(dialogContext, false),
-            child: Text(l10n.cancel),
-          ),
-          FilledButton(
-            onPressed: () => Navigator.pop(dialogContext, true),
-            child: Text(l10n.allow),
-          ),
-        ],
+      return PopScope(
+        canPop: false,
+        child: AlertDialog(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+          title: Text(l10n.micRequired),
+          content: Text(l10n.micRequiredBody),
+          actions: [
+            FilledButton(
+              onPressed: () => Navigator.pop(dialogContext),
+              child: Text(l10n.continueAction),
+            ),
+          ],
+        ),
       );
     },
   );
 
-  if (shouldRequest != true) return false;
+  if (!context.mounted) return false;
 
   var granted = await microphoneService.ensurePermission();
   if (granted) return true;
