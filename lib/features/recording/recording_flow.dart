@@ -28,13 +28,20 @@ class RecordingFlow {
     if (await _microphone.hasPermission) return true;
     if (!context.mounted) return false;
 
+    final blockedBeforePrompt = await _microphone.isPermanentlyDenied();
+    if (!context.mounted) return false;
+
     final granted = await showMicrophonePermissionDialog(context, _microphone);
     if (!context.mounted) return false;
     if (granted) return true;
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(context.l10n.micPermissionRequired)),
-    );
+    // A previous denial already showed a Settings choice. A fresh "Don't Allow"
+    // only gets a short message, with no jump to Settings.
+    if (!blockedBeforePrompt) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(context.l10n.micPermissionRequired)),
+      );
+    }
     return false;
   }
 

@@ -159,6 +159,9 @@ class AppStrings {
   // --- Dialogs ---
   String get micRequired => _t('micRequired');
   String get micRequiredBody => _t('micRequiredBody');
+  String get micSettingsBody => _t('micSettingsBody');
+  String get openSettings => _t('openSettings');
+  String get notNow => _t('notNow');
   String get allow => _t('allow');
   String get deleteRecordingTitle => _t('deleteRecordingTitle');
   String get deleteRecordingBody => _t('deleteRecordingBody');
@@ -435,6 +438,11 @@ const _fr = {
   'micRequiredBody':
       'L\'accès au microphone est nécessaire pour enregistrer '
       'des notes vocales et des réunions.',
+  'micSettingsBody':
+      'L\'enregistrement ne fonctionne pas sans le microphone. '
+      'Vous pouvez l\'activer dans Réglages quand vous le souhaitez.',
+  'openSettings': 'Ouvrir Réglages',
+  'notNow': 'Pas maintenant',
   'allow': 'Autoriser',
   'deleteRecordingTitle': 'Supprimer l\'enregistrement ?',
   'deleteRecordingBody': 'Cette action est irréversible.',
@@ -619,6 +627,11 @@ const _en = {
   'micRequired': 'Microphone required',
   'micRequiredBody':
       'Microphone access is required to record voice notes and meetings.',
+  'micSettingsBody':
+      'Recording will not work without the microphone. '
+      'You can turn it on in Settings whenever you want.',
+  'openSettings': 'Open Settings',
+  'notNow': 'Not Now',
   'allow': 'Allow',
   'deleteRecordingTitle': 'Delete recording?',
   'deleteRecordingBody': 'This action cannot be undone.',
@@ -791,6 +804,10 @@ const _ar = {
   'micRequired': 'الميكروفون مطلوب',
   'micRequiredBody':
       'الوصول إلى الميكروفون ضروري لتسجيل الملاحظات الصوتية والاجتماعات.',
+  'micSettingsBody':
+      'لن يعمل التسجيل بدون الميكروفون. يمكنك تفعيله من الإعدادات متى شئت.',
+  'openSettings': 'فتح الإعدادات',
+  'notNow': 'ليس الآن',
   'allow': 'السماح',
   'deleteRecordingTitle': 'حذف التسجيل؟',
   'deleteRecordingBody': 'لا يمكن التراجع عن هذا الإجراء.',
@@ -962,6 +979,11 @@ const _es = {
   'micRequired': 'Micrófono requerido',
   'micRequiredBody':
       'Se necesita acceso al micrófono para grabar notas de voz y reuniones.',
+  'micSettingsBody':
+      'La grabación no funciona sin el micrófono. '
+      'Puedes activarlo en Ajustes cuando quieras.',
+  'openSettings': 'Abrir Ajustes',
+  'notNow': 'Ahora no',
   'allow': 'Permitir',
   'deleteRecordingTitle': '¿Eliminar grabación?',
   'deleteRecordingBody': 'Esta acción no se puede deshacer.',
