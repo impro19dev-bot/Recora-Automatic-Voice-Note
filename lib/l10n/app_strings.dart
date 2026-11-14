@@ -471,12 +471,12 @@ const _fr = {
       'Cette application n\'enregistre pas automatiquement les appels '
       'cellulaires iPhone.',
   'shareAppText':
-      'Recora Automatic Voice Note - Enregistrez des réunions, des notes vocales '
+      'Automatic Call Recorder - Enregistrez des réunions, des notes vocales '
       'et des résumés après appel.',
   'modeManual': 'Enregistrement manuel',
   'modeMeeting': 'Réunion',
   'modeCallNote': 'Note après appel',
-  'appName': 'Recora Automatic Voice Note',
+  'appName': 'Automatic Call Recorder',
   'onboardingTagline':
       'Enregistrez des réunions, des notes vocales et des résumés après appel.',
   'onboardingManualTitle': 'Enregistrement manuel',
@@ -502,7 +502,7 @@ const _fr = {
       'Vous êtes responsable d\'obtenir le consentement des personnes '
       'présentes avant d\'enregistrer une conversation.',
   'privacyIntro':
-      'Recora Automatic Voice Note enregistre des notes vocales, des réunions '
+      'Automatic Call Recorder enregistre des notes vocales, des réunions '
       'et des résumés après appel uniquement via le microphone de votre '
       'appareil, lorsque vous appuyez sur le bouton Démarrer.',
   'consentIntro':
@@ -659,11 +659,11 @@ const _en = {
   'drawerSafetyBanner':
       'This app does not automatically record iPhone cellular calls.',
   'shareAppText':
-      'Recora Automatic Voice Note - Record meetings, voice notes, and post-call summaries.',
+      'Automatic Call Recorder - Record meetings, voice notes, and post-call summaries.',
   'modeManual': 'Manual recording',
   'modeMeeting': 'Meeting',
   'modeCallNote': 'Post-call note',
-  'appName': 'Recora Automatic Voice Note',
+  'appName': 'Automatic Call Recorder',
   'onboardingTagline': 'Record meetings, voice notes, and post-call summaries.',
   'onboardingManualTitle': 'Manual recording',
   'onboardingManualBody':
@@ -685,7 +685,7 @@ const _en = {
       'You are responsible for obtaining consent from everyone present '
       'before recording a conversation.',
   'privacyIntro':
-      'Recora Automatic Voice Note records voice notes, meetings, and post-call '
+      'Automatic Call Recorder records voice notes, meetings, and post-call '
       'summaries only via your device microphone when you tap Start.',
   'consentIntro':
       'Before each recording, make sure everyone involved agrees to be recorded.',
@@ -835,11 +835,11 @@ const _ar = {
   'rateFiveStars': 'تقييم 5 نجوم',
   'drawerSafetyBanner': 'لا يسجّل هذا التطبيق تلقائياً مكالمات iPhone الخلوية.',
   'shareAppText':
-      'Recora Automatic Voice Note - سجّل الاجتماعات والملاحظات الصوتية وملخصات ما بعد المكالمة.',
+      'Automatic Call Recorder - سجّل الاجتماعات والملاحظات الصوتية وملخصات ما بعد المكالمة.',
   'modeManual': 'تسجيل يدوي',
   'modeMeeting': 'اجتماع',
   'modeCallNote': 'ملاحظة بعد المكالمة',
-  'appName': 'Recora Automatic Voice Note',
+  'appName': 'Automatic Call Recorder',
   'onboardingTagline':
       'سجّل الاجتماعات والملاحظات الصوتية وملخصات ما بعد المكالمة.',
   'onboardingManualTitle': 'تسجيل يدوي',
@@ -859,7 +859,7 @@ const _ar = {
   'consentResponsibility':
       'أنت مسؤول عن الحصول على موافقة الحاضرين قبل تسجيل محادثة.',
   'privacyIntro':
-      'يسجّل Recora Automatic Voice Note الملاحظات الصوتية والاجتماعات '
+      'يسجّل Automatic Call Recorder الملاحظات الصوتية والاجتماعات '
       'وملخصات ما بعد المكالمة فقط عبر ميكروفون جهازك عند الضغط على بدء.',
   'consentIntro': 'قبل كل تسجيل، تأكد من موافقة جميع المعنيين على التسجيل.',
   'consentManualStart':
@@ -1013,11 +1013,11 @@ const _es = {
   'drawerSafetyBanner':
       'Esta aplicación no graba automáticamente llamadas celulares de iPhone.',
   'shareAppText':
-      'Recora Automatic Voice Note - Graba reuniones, notas de voz y resúmenes tras llamadas.',
+      'Automatic Call Recorder - Graba reuniones, notas de voz y resúmenes tras llamadas.',
   'modeManual': 'Grabación manual',
   'modeMeeting': 'Reunión',
   'modeCallNote': 'Nota tras llamada',
-  'appName': 'Recora Automatic Voice Note',
+  'appName': 'Automatic Call Recorder',
   'onboardingTagline':
       'Graba reuniones, notas de voz y resúmenes tras llamadas.',
   'onboardingManualTitle': 'Grabación manual',
@@ -1041,7 +1041,7 @@ const _es = {
       'Eres responsable de obtener el consentimiento de las personas presentes '
       'antes de grabar una conversación.',
   'privacyIntro':
-      'Recora Automatic Voice Note graba notas de voz, reuniones y resúmenes tras '
+      'Automatic Call Recorder graba notas de voz, reuniones y resúmenes tras '
       'llamadas solo con el micrófono de tu dispositivo cuando pulsas Iniciar.',
   'consentIntro':
       'Antes de cada grabación, asegúrate de que todas las personas involucradas acepten ser grabadas.',

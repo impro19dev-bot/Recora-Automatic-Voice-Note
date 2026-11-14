@@ -91,7 +91,7 @@ class _RecoraAppState extends State<RecoraApp> with WidgetsBindingObserver {
           }
 
           return MaterialApp(
-            title: 'Recora Automatic Voice Note',
+            title: 'Automatic Call Recorder',
             debugShowCheckedModeBanner: false,
             theme: AppTheme.light,
             locale: _localeService.locale.flutterLocale,
