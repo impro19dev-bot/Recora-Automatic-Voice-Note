@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 
 import '../../core/theme/app_colors.dart';
 import '../../l10n/locale_scope.dart';
+import '../../services/ads_bootstrap_service.dart';
 import '../../services/app_preferences_service.dart';
 import '../../widgets/app_logo.dart';
 import '../home/home_screen.dart';
@@ -19,10 +20,21 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(const Duration(milliseconds: 1400), _goNext);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _start();
+    });
   }
 
-  Future<void> _goNext() async {
+  Future<void> _start() async {
+    final minimumSplash = Future<void>.delayed(
+      const Duration(milliseconds: 900),
+    );
+
+    // GDPR (UMP CMP) only on splash. ATT is requested after this route is
+    // replaced so it is not stacked under the splash or the consent form.
+    await AdsBootstrapService.gatherUmpConsent();
+    await minimumSplash;
+
     if (!mounted) return;
     final seen = await AppPreferencesService().hasSeenSafetyOnboarding();
     if (!mounted) return;
@@ -51,7 +63,11 @@ class _SplashScreenState extends State<SplashScreen> {
             gradient: LinearGradient(
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
-              colors: [AppColors.crimsonDeep, AppColors.crimson, AppColors.crimsonDark],
+              colors: [
+                AppColors.crimsonDeep,
+                AppColors.crimson,
+                AppColors.crimsonDark,
+              ],
             ),
           ),
           child: Center(

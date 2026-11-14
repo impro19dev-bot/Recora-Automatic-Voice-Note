@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../core/theme/app_colors.dart';
 import '../../l10n/locale_scope.dart';
 import '../../services/app_preferences_service.dart';
+import '../../services/att_request_service.dart';
 import '../../widgets/app_logo.dart';
 import '../home/home_screen.dart';
 
@@ -16,6 +17,12 @@ class SafetyOnboardingScreen extends StatefulWidget {
 class _SafetyOnboardingScreenState extends State<SafetyOnboardingScreen> {
   final _preferences = AppPreferencesService();
   bool _accepted = false;
+
+  @override
+  void initState() {
+    super.initState();
+    AttRequestService.requestAfterSplashIfNeeded();
+  }
 
   Future<void> _continue() async {
     await _preferences.setSafetyOnboardingSeen(true);

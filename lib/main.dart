@@ -7,11 +7,17 @@ import 'core/theme/app_theme.dart';
 import 'features/splash/splash_screen.dart';
 import 'l10n/app_locale.dart';
 import 'l10n/locale_scope.dart';
+import 'services/ads_bootstrap_service.dart';
+import 'services/app_open_ad_manager.dart';
 import 'services/app_preferences_service.dart';
 import 'services/locale_service.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Prefetch only — Mobile Ads / UMP run after the first frame so the CMP
+  // form has a valid iOS presentation window.
+  await AdsBootstrapService.prefetchConfig();
 
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(
@@ -37,14 +43,28 @@ class RecoraApp extends StatefulWidget {
   State<RecoraApp> createState() => _RecoraAppState();
 }
 
-class _RecoraAppState extends State<RecoraApp> {
+class _RecoraAppState extends State<RecoraApp> with WidgetsBindingObserver {
   late final LocaleService _localeService;
 
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     _localeService = LocaleService(AppPreferencesService());
     _localeService.load();
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      AppOpenAdManager.instance.tryShowOnResume();
+    }
   }
 
   @override

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../core/theme/app_colors.dart';
 import '../../l10n/locale_scope.dart';
+import '../../services/ad_action_service.dart';
 import 'recording_type.dart';
 
 Future<RecordingType?> showCallNoteTypeSheet(BuildContext context) {
@@ -12,6 +13,12 @@ Future<RecordingType?> showCallNoteTypeSheet(BuildContext context) {
     builder: (context) {
       final l10n = context.l10n;
       final bottom = MediaQuery.viewPaddingOf(context).bottom;
+
+      Future<void> pick(RecordingType type) async {
+        await AdActionService.runWithRewardedAsync(() async {
+          if (context.mounted) Navigator.pop(context, type);
+        });
+      }
 
       return SafeArea(
         child: SingleChildScrollView(
@@ -42,19 +49,19 @@ Future<RecordingType?> showCallNoteTypeSheet(BuildContext context) {
                 icon: Icons.call_received_rounded,
                 title: l10n.recordingTypeIncoming,
                 subtitle: l10n.callNoteIncomingSubtitle,
-                onTap: () => Navigator.pop(context, RecordingType.incomingNote),
+                onTap: () => pick(RecordingType.incomingNote),
               ),
               _OptionTile(
                 icon: Icons.call_made_rounded,
                 title: l10n.recordingTypeOutgoing,
                 subtitle: l10n.callNoteOutgoingSubtitle,
-                onTap: () => Navigator.pop(context, RecordingType.outgoingNote),
+                onTap: () => pick(RecordingType.outgoingNote),
               ),
               _OptionTile(
                 icon: Icons.sticky_note_2_outlined,
                 title: l10n.recordingTypeVoice,
                 subtitle: l10n.callNoteVoiceSubtitle,
-                onTap: () => Navigator.pop(context, RecordingType.voiceNote),
+                onTap: () => pick(RecordingType.voiceNote),
               ),
             ],
           ),

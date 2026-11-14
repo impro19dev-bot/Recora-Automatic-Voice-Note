@@ -4,6 +4,7 @@ import 'package:uuid/uuid.dart';
 import '../../core/theme/app_colors.dart';
 import '../../l10n/locale_scope.dart';
 import '../../models/recording_item.dart';
+import '../../services/ad_action_service.dart';
 import 'recording_type.dart';
 
 Future<RecordingItem?> showLogCallSheet(BuildContext context) {
@@ -47,30 +48,33 @@ class _LogCallSheetState extends State<LogCallSheet> {
     super.dispose();
   }
 
-  void _save() {
+  Future<void> _save() async {
     final title = _titleController.text.trim();
     if (title.isEmpty) return;
-    Navigator.pop(
-      context,
-      RecordingItem(
-        id: const Uuid().v4(),
-        title: title,
-        type: RecordingType.loggedCall,
-        duration: Duration.zero,
-        createdAt: DateTime.now(),
-        filePath: '',
-        contactName: _contactController.text.trim().isEmpty
-            ? null
-            : _contactController.text.trim(),
-        note: [
-          if (_type != RecordingType.loggedCall)
-            context.l10n.recordingTypeBadge(_type),
-          if (_noteController.text.trim().isNotEmpty)
-            _noteController.text.trim(),
-        ].join(' · ').trim(),
-        isFavorite: _favorite,
-      ),
-    );
+    await AdActionService.runWithRewardedAsync(() async {
+      if (!mounted) return;
+      Navigator.pop(
+        context,
+        RecordingItem(
+          id: const Uuid().v4(),
+          title: title,
+          type: RecordingType.loggedCall,
+          duration: Duration.zero,
+          createdAt: DateTime.now(),
+          filePath: '',
+          contactName: _contactController.text.trim().isEmpty
+              ? null
+              : _contactController.text.trim(),
+          note: [
+            if (_type != RecordingType.loggedCall)
+              context.l10n.recordingTypeBadge(_type),
+            if (_noteController.text.trim().isNotEmpty)
+              _noteController.text.trim(),
+          ].join(' · ').trim(),
+          isFavorite: _favorite,
+        ),
+      );
+    });
   }
 
   @override
@@ -162,7 +166,11 @@ class _LogCallSheetState extends State<LogCallSheet> {
               children: [
                 Expanded(
                   child: OutlinedButton(
-                    onPressed: () => Navigator.pop(context),
+                    onPressed: () {
+                      AdActionService.runWithInterstitial(() {
+                        if (mounted) Navigator.pop(context);
+                      });
+                    },
                     child: Text(l10n.cancel),
                   ),
                 ),

@@ -6,8 +6,11 @@ import '../../l10n/locale_scope.dart';
 import '../../models/recording_filter_tab.dart';
 import '../../models/recording_item.dart';
 import '../../models/recording_sort.dart';
+import '../../services/ad_action_service.dart';
 import '../../services/app_preferences_service.dart';
+import '../../services/att_request_service.dart';
 import '../../services/recordings_repository.dart';
+import '../../widgets/app_banner_ad.dart';
 import '../../widgets/language_selector.dart';
 import '../../widgets/recording_list_tile.dart';
 import '../recording/playback_sheet.dart';
@@ -36,6 +39,7 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     _flow = RecordingFlow(repository: _repository);
     _repository.addListener(_refresh);
+    AttRequestService.requestAfterSplashIfNeeded();
     _bootstrap();
   }
 
@@ -81,12 +85,42 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<void> _quickRecord() async {
     switch (_mode) {
       case RecordingModePreference.callNote:
-        await _flow.startCallNote(context);
+        await AdActionService.runWithRewardedAsync(
+          () => _flow.startCallNote(context),
+        );
       case RecordingModePreference.meeting:
-        await _flow.startMeeting(context);
+        await AdActionService.runWithInterstitialAsync(
+          () => _flow.startMeeting(context),
+        );
       case RecordingModePreference.manual:
-        await _flow.startMeeting(context);
+        await AdActionService.runWithInterstitialAsync(
+          () => _flow.startMeeting(context),
+        );
     }
+  }
+
+  Future<void> _selectTab(RecordingFilterTab tab) async {
+    if (_tab == tab) return;
+    await AdActionService.runWithRewardedAsync(() async {
+      if (!mounted) return;
+      setState(() => _tab = tab);
+    });
+  }
+
+  Future<void> _openSettings() async {
+    await AdActionService.runWithInterstitialAsync(() async {
+      if (!mounted) return;
+      await Navigator.push<void>(
+        context,
+        MaterialPageRoute(
+          builder: (_) => SettingsScreen(
+            onRecordingModeChanged: (mode) {
+              setState(() => _mode = mode);
+            },
+          ),
+        ),
+      );
+    });
   }
 
   @override
@@ -114,18 +148,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             IconButton(
               tooltip: l10n.settings,
-              onPressed: () async {
-                await Navigator.push<void>(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => SettingsScreen(
-                      onRecordingModeChanged: (mode) {
-                        setState(() => _mode = mode);
-                      },
-                    ),
-                  ),
-                );
-              },
+              onPressed: _openSettings,
               icon: const Icon(Icons.settings_outlined),
             ),
             IconButton(
@@ -165,64 +188,92 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   const SizedBox(height: 10),
                   _ActionGrid(
-                    onMeeting: () => _flow.startMeeting(context),
-                    onCallNote: () => _flow.startCallNote(context),
-                    onLogCall: () => _flow.logCall(context),
-                    onIncoming: () => _flow.startType(
-                      context,
-                      RecordingType.incomingNote,
-                    ),
-                    onOutgoing: () => _flow.startType(
-                      context,
-                      RecordingType.outgoingNote,
-                    ),
-                    onVoice: () => _flow.startType(
-                      context,
-                      RecordingType.voiceNote,
-                    ),
+                    onMeeting: () {
+                      AdActionService.runWithInterstitial(
+                        () => _flow.startMeeting(context),
+                      );
+                    },
+                    onCallNote: () {
+                      AdActionService.runWithRewarded(
+                        () => _flow.startCallNote(context),
+                      );
+                    },
+                    onLogCall: () {
+                      AdActionService.runWithRewarded(
+                        () => _flow.logCall(context),
+                      );
+                    },
+                    onIncoming: () {
+                      AdActionService.runWithRewarded(
+                        () => _flow.startType(
+                          context,
+                          RecordingType.incomingNote,
+                        ),
+                      );
+                    },
+                    onOutgoing: () {
+                      AdActionService.runWithRewarded(
+                        () => _flow.startType(
+                          context,
+                          RecordingType.outgoingNote,
+                        ),
+                      );
+                    },
+                    onVoice: () {
+                      AdActionService.runWithRewarded(
+                        () => _flow.startType(
+                          context,
+                          RecordingType.voiceNote,
+                        ),
+                      );
+                    },
                   ),
                   const SizedBox(height: 20),
                   _buildListContent(),
                 ],
               ),
-        bottomNavigationBar: Container(
-          decoration: const BoxDecoration(
-            border: Border(top: BorderSide(color: AppColors.border)),
-            color: AppColors.surface,
-          ),
-          child: SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 6),
-              child: Row(
-                children: [
-                  _NavItem(
-                    icon: Icons.description_outlined,
-                    selectedIcon: Icons.description,
-                    label: l10n.tabAllNav,
-                    selected: _tab == RecordingFilterTab.all,
-                    onTap: () =>
-                        setState(() => _tab = RecordingFilterTab.all),
+        bottomNavigationBar: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const AppBannerAd(),
+            Container(
+              decoration: const BoxDecoration(
+                border: Border(top: BorderSide(color: AppColors.border)),
+                color: AppColors.surface,
+              ),
+              child: SafeArea(
+                top: false,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 6),
+                  child: Row(
+                    children: [
+                      _NavItem(
+                        icon: Icons.description_outlined,
+                        selectedIcon: Icons.description,
+                        label: l10n.tabAllNav,
+                        selected: _tab == RecordingFilterTab.all,
+                        onTap: () => _selectTab(RecordingFilterTab.all),
+                      ),
+                      _NavItem(
+                        icon: Icons.phone_outlined,
+                        selectedIcon: Icons.phone,
+                        label: l10n.tabIncoming,
+                        selected: _tab == RecordingFilterTab.incoming,
+                        onTap: () => _selectTab(RecordingFilterTab.incoming),
+                      ),
+                      _NavItem(
+                        icon: Icons.star_border_rounded,
+                        selectedIcon: Icons.star_rounded,
+                        label: l10n.tabFavorites,
+                        selected: _tab == RecordingFilterTab.favorites,
+                        onTap: () => _selectTab(RecordingFilterTab.favorites),
+                      ),
+                    ],
                   ),
-                  _NavItem(
-                    icon: Icons.phone_outlined,
-                    selectedIcon: Icons.phone,
-                    label: l10n.tabIncoming,
-                    selected: _tab == RecordingFilterTab.incoming,
-                    onTap: () =>
-                        setState(() => _tab = RecordingFilterTab.incoming),
-                  ),
-                  _NavItem(
-                    icon: Icons.star_border_rounded,
-                    selectedIcon: Icons.star_rounded,
-                    label: l10n.tabFavorites,
-                    selected: _tab == RecordingFilterTab.favorites,
-                    onTap: () =>
-                        setState(() => _tab = RecordingFilterTab.favorites),
-                  ),
-                ],
+                ),
               ),
             ),
-          ),
+          ],
         ),
       ),
     );
@@ -273,7 +324,9 @@ class _HomeScreenState extends State<HomeScreen> {
           RecordingListTile(
             item: items[i],
             onTap: () => _openItem(items[i]),
-            onFavoriteToggle: () => _repository.toggleFavorite(items[i].id),
+            onFavoriteToggle: () => AdActionService.runWithRewardedAsync(
+              () async => _repository.toggleFavorite(items[i].id),
+            ),
             onDelete: () => _flow.confirmDelete(context, items[i]),
           ),
         ],

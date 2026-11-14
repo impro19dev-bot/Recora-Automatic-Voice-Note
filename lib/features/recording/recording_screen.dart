@@ -5,7 +5,9 @@ import 'package:record/record.dart';
 
 import '../../core/theme/app_colors.dart';
 import '../../l10n/locale_scope.dart';
+import '../../services/ad_action_service.dart';
 import '../../services/app_preferences_service.dart';
+import '../../services/recording_activity.dart';
 import '../../services/recording_storage_service.dart';
 import 'recording_type.dart';
 
@@ -45,6 +47,7 @@ class _RecordingScreenState extends State<RecordingScreen> {
   @override
   void initState() {
     super.initState();
+    RecordingActivity.isScreenOpen = true;
     _prepare();
   }
 
@@ -58,6 +61,7 @@ class _RecordingScreenState extends State<RecordingScreen> {
 
   @override
   void dispose() {
+    RecordingActivity.isScreenOpen = false;
     _timer?.cancel();
     unawaited(_recorder.stop());
     _recorder.dispose();
@@ -164,33 +168,36 @@ class _RecordingScreenState extends State<RecordingScreen> {
   }
 
   Future<void> _handleBack() async {
-    if (!_isRecording) {
-      if (mounted) Navigator.pop(context);
-      return;
+    if (_isRecording) {
+      final l10n = context.l10n;
+      final shouldLeave = await showDialog<bool>(
+        context: context,
+        builder: (dialogContext) => AlertDialog(
+          title: Text(l10n.recordingInProgress),
+          content: Text(l10n.stopAndLeave),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(dialogContext, false),
+              child: Text(l10n.continueAction),
+            ),
+            FilledButton(
+              onPressed: () => Navigator.pop(dialogContext, true),
+              child: Text(l10n.leave),
+            ),
+          ],
+        ),
+      );
+      if (shouldLeave != true || !mounted) return;
+      _timer?.cancel();
+      await _recorder.stop();
+      if (_filePath != null) await _storage.deleteFile(_filePath!);
+      if (!mounted) return;
     }
-    final l10n = context.l10n;
-    final shouldLeave = await showDialog<bool>(
-      context: context,
-      builder: (dialogContext) => AlertDialog(
-        title: Text(l10n.recordingInProgress),
-        content: Text(l10n.stopAndLeave),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(dialogContext, false),
-            child: Text(l10n.continueAction),
-          ),
-          FilledButton(
-            onPressed: () => Navigator.pop(dialogContext, true),
-            child: Text(l10n.leave),
-          ),
-        ],
-      ),
-    );
-    if (shouldLeave != true || !mounted) return;
-    _timer?.cancel();
-    await _recorder.stop();
-    if (_filePath != null) await _storage.deleteFile(_filePath!);
-    if (mounted) Navigator.pop(context);
+
+    // Stop recording first, then show the interstitial so audio is not covered.
+    await AdActionService.runWithInterstitialAsync(() async {
+      if (mounted) Navigator.pop(context);
+    });
   }
 
   @override

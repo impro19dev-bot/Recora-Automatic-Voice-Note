@@ -4,6 +4,7 @@ import 'package:uuid/uuid.dart';
 import '../../core/theme/app_colors.dart';
 import '../../l10n/locale_scope.dart';
 import '../../models/recording_item.dart';
+import '../../services/ad_action_service.dart';
 import 'recording_screen.dart';
 import 'recording_type.dart';
 
@@ -58,9 +59,11 @@ class _SaveRecordingSheetState extends State<SaveRecordingSheet> {
     return false;
   }
 
-  void _save() {
+  Future<void> _save() async {
     if (_titleController.text.trim().isEmpty) return;
-    _completeSave();
+    await AdActionService.runWithRewardedAsync(() async {
+      _completeSave();
+    });
   }
 
   void _completeSave() {
@@ -199,7 +202,11 @@ class _SaveRecordingSheetState extends State<SaveRecordingSheet> {
                     style: OutlinedButton.styleFrom(
                       minimumSize: const Size(0, 48),
                     ),
-                    onPressed: () => Navigator.pop(context),
+                    onPressed: () {
+                      AdActionService.runWithInterstitial(() {
+                        if (mounted) Navigator.pop(context);
+                      });
+                    },
                     child: Text(l10n.cancel),
                   ),
                 ),

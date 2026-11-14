@@ -181,6 +181,7 @@ class AppStrings {
   String get audioRate => _t('audioRate');
   String get audioBitrate => _t('audioBitrate');
   String get privacyPolicy => _t('privacyPolicy');
+  String get privacyOptions => _t('privacyOptions');
   String get recordingConsent => _t('recordingConsent');
   String get about => _t('about');
   String get rateFiveStars => _t('rateFiveStars');
@@ -462,6 +463,7 @@ const _fr = {
   'audioRate': 'Taux audio',
   'audioBitrate': 'Bitrate audio',
   'privacyPolicy': 'Politique de confidentialité',
+  'privacyOptions': 'Options de confidentialité',
   'recordingConsent': 'Consentement d\'enregistrement',
   'about': 'À propos',
   'rateFiveStars': 'Note 5 étoiles',
@@ -650,6 +652,7 @@ const _en = {
   'audioRate': 'Sample rate',
   'audioBitrate': 'Audio bitrate',
   'privacyPolicy': 'Privacy policy',
+  'privacyOptions': 'Privacy options',
   'recordingConsent': 'Recording consent',
   'about': 'About',
   'rateFiveStars': 'Rate 5 stars',
@@ -826,6 +829,7 @@ const _ar = {
   'audioRate': 'معدل العيّنة',
   'audioBitrate': 'معدل البت',
   'privacyPolicy': 'سياسة الخصوصية',
+  'privacyOptions': 'خيارات الخصوصية',
   'recordingConsent': 'موافقة التسجيل',
   'about': 'حول',
   'rateFiveStars': 'تقييم 5 نجوم',
@@ -1002,6 +1006,7 @@ const _es = {
   'audioRate': 'Frecuencia de muestreo',
   'audioBitrate': 'Bitrate de audio',
   'privacyPolicy': 'Política de privacidad',
+  'privacyOptions': 'Opciones de privacidad',
   'recordingConsent': 'Consentimiento de grabación',
   'about': 'Acerca de',
   'rateFiveStars': 'Valorar 5 estrellas',
